@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Ändra e-postmall";
+}
+
+@model Tengella.Survey.Web.Models.TemplateViewModel
+
+<div class="d-flex align-items-center p-3 my-3 text-white-50 bg-primary bg-gradient rounded box-shadow">
+    <img src=~/icons/survey_icon.svg alt="" width="48" height="48" />
+    <div class="lh-100 mx-3">
+        <h1 class="mb-0 p-0 text-white lh-100">Ändra e-postmall</h1>
+        <small>Ändra din mall</small>
+    </div>
+</div>
+
+<div class="my-3 p-3 bg-white rounded box-shadow">
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+
+        <div class="d-flex flex-column gap-3">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name, "Namn")
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Subject, "Ämne")
+                @Html.TextBoxFor(m => m.Subject, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Body, "Meddelande")
+                @Html.TextAreaFor(m => m.Body, new { id = "body-textarea", @class = "form-control", rows = 10, required = true })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.SurveyId, "Enkät")
+                @Html.DropDownListFor(m => m.SurveyId, @Model.ListOfSurvey?.Select(st => new SelectListItem { Value = st.Id.ToString(), Text = st.Name }), "Välj enkät", new { title = "Typ", @id = "surveyType", @class = "form-control", required = true })
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Spara</button>
+                @Html.ActionLink("Gå tillbaka", "Index", "Template", null, new { @class = "btn btn-secondary" })
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/addPlaceholderBody.js"></script>
+}

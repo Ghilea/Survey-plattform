@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Tengella.Survey.Web.Models.SurveyViewModel>
+
+@{
+    ViewData["Title"] = "Enkäter";
+}
+
+<div class="d-flex flex-column justify-content-center align-items-center gap-5 min-vh-100">
+    <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
+        <h1 class="h1-responsive font-weight-bold mt-sm-5">Enkäter</h1>
+        <hr class="hr-light">
+        <h2 class="mb-4 h6">
+            Här listas alla enkäter som skapats. Det går att visuallisera statistik, kopiera och ändra dem.
+        </h2>
+        @Html.ActionLink("Skapa", "Create", "Survey", null, new { @class = "btn btn-light"})
+    </div>
+
+    @if (Model.Count() > 0)
+    {
+        <div class="col-12 my-3 p-3 bg-gradient rounded box-shadow">
+            @foreach (var survey in Model)
+            {
+                <div class="pt-4 pb-5 border-bottom border-gray d-flex gap-4 flex-wrap justify-content-between">
+                    @{
+                        DateTime currentDate = DateTime.Now;
+                        TimeSpan timeLeft = survey.EndDate - currentDate;
+                        int daysLeft = ((int)timeLeft.TotalDays < 0) ? 0 : (int)timeLeft.TotalDays;
+                    }
+
+                    <div class="d-flex px-3 gap-4">
+                        <img class="rounded" width="64" height="64" alt="" src="~/icons/survey_icon.svg">
+                        <div class="d-flex flex-column align-content-center justify-content-center flex-wrap gap-1">
+                            <strong class="text-info">@Html.ActionLink((@survey).Name, "ViewSurvey", new { id = survey.Id}, new { @class = "text-light"}) (@survey.TypeName)</strong>
+                            
+                            <div class="d-flex flex-column flex-md-row gap-4">
+                                <div class="d-flex flex-column align-items-start justify-content-center flex-wrap gap-1">
+                                    <div class="d-flex flex-row gap-3 align-items-center">
+                                        <img class="rounded" width="16" height="16" alt="" src="~/icons/calendar.svg">
+                                        <small class="text-light">Börjar: @survey.StartDate.ToString("dd MMM yyyy")</small>
+                                    </div>
+
+                                    <div class="d-flex flex-row gap-3 align-items-center">
+                                        <img class="rounded" width="16" height="16" alt="" src="~/icons/calendar.svg">
+                                        <small class="text-light">Avslutas: @survey.EndDate.ToString("dd MMM yyyy") (@daysLeft dagar kvar)</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column align-items-start justify-content-center flex-wrap gap-1">
+                                    <div class="d-flex flex-row gap-3 align-items-center">
+                                        <img class="rounded" width="16" height="16" alt="" src="~/icons/calendar.svg">
+                                        <small class="text-light">Antal mottagare: @survey.AmountRecivers</small>
+                                    </div>
+
+                                    <div class="d-flex flex-row gap-3 align-items-center">
+                                        <img class="rounded" width="16" height="16" alt="" src="~/icons/calendar.svg">
+                                        <small class="text-light">Antal svarande: @survey.AmountRetrivers</small>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 justify-content-evenly col-12 col-xl-auto">
+                        @Html.ActionLink("Kopiera", "Copy", new {id = survey.Id}, new { @class = "btn btn-primary"})
+                        @Html.ActionLink("Ändra", "Edit", new {id = survey.Id}, new { @class = "btn btn-light" })
+                        @Html.ActionLink("Statistik", "Index", "Statistic", new {id = survey.Id}, new { @class = "btn btn-primary bg-gradient" })
+                        @Html.ActionLink("Ta bort", "Delete", new {id = survey.Id}, new { @class = "btn bg-danger bg-gradient text-white", onclick = "return confirm('Är du säker på att du vill ta bort enkäten?');" })
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+</div>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Tengella.Survey.Data.Models.Template>
+
+@{
+    ViewData["Title"] = "E-postmall";
+}
+
+<div class="d-flex flex-column justify-content-center align-items-center gap-5 min-vh-100">
+    <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
+        <h1 class="h1-responsive font-weight-bold mt-sm-5">E-postmall</h1>
+        <hr class="hr-light">
+        <h2 class="mb-4 h6">
+            Se dina e-postmallar här. Skapa, ändra, skicka till kunder antingen med redan inlagda e-postadresser eller med att importa från fil.
+        </h2>
+        @Html.ActionLink("Skapa", "Create", "Template", null, new { @class = "btn btn-light"})
+    </div>
+
+    @if (Model.Count() > 0)
+    {
+        <div class="col-12 my-3 p-3 bg-gradient rounded box-shadow">
+            @foreach (var template in Model)
+            {
+                <div class="pt-4 pb-5 border-bottom border-gray d-flex gap-4 flex-wrap justify-content-between">
+
+                    <div class="d-flex px-3 gap-4">
+                        <img class="rounded" width="64" height="64" alt="" src="~/icons/survey_icon.svg">
+                        <div class="d-flex flex-column align-content-center justify-content-center flex-wrap gap-1">
+                            <strong class="text-info"><span class="text-light">@template.Name</span> (@template.Subject)</strong>
+
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 justify-content-evenly col-12 col-xl-auto">
+                        @Html.ActionLink("Skicka", "Send", new {id = template.Id}, new { @class = "btn btn-primary sendButton"})
+                        @Html.ActionLink("Ändra", "Edit", new {id = template.Id}, new { @class = "btn btn-light bg-gradient" })
+                        @Html.ActionLink("Ta bort", "Delete", new {id = template.Id}, new { @class = "btn bg-danger bg-gradient text-white", onclick = "return confirm('Är du säker på att du vill ta bort  e-postmallen?');" })
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    
+</div>

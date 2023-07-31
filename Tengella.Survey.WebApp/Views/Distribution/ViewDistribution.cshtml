@@ -1,0 +1,29 @@
+﻿@model Tengella.Survey.Web.Models.DistributionViewModel
+
+@{
+    ViewData["Title"] = "Vy för användare";
+}
+
+<div class="d-flex flex-column justify-content-center align-items-center gap-5 min-vh-100">
+    <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
+        <h1 class="h1-responsive font-weight-bold mt-sm-5">@Model.Name</h1>
+        <hr class="hr-light">
+        <h2 class="mb-4 h6">
+            @Model.TypeName
+        </h2>
+    </div>
+
+    <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
+    
+        <div class="d-flex flex-column gap-3">
+            <h2 class="fs-5">E-postadress</h2>
+            <p>@Model.Email</p>
+        </div>
+
+        <div class="d-flex flex-column gap-3">
+            <h2 class="fs-5">Organisationsnummer</h2>
+            <p class="fs-5">@Model.OrganizationNumber</p>
+        </div>
+    
+    </div>
+</div>

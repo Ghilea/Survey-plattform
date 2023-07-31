@@ -1,0 +1,92 @@
+﻿@model Tengella.Survey.Web.Models.StatisticViewModel
+
+@{
+    ViewData["Title"] = "Enkät";
+}
+
+<div class="d-flex flex-column justify-content-center align-items-center gap-5 min-vh-100">
+    <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
+        <h1 class="h1-responsive font-weight-bold mt-sm-5">Statistik</h1>
+        <hr class="hr-light">
+        <h2 class="mb-4 h6">
+            
+        </h2>
+    </div>
+
+    <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
+        <div class="d-flex flex-row gap-5 my-5">
+            <canvas id="myChart" class="w-50 h-25"></canvas>
+            <div class="w-50">
+                <div>
+                    <h2>Mottagare</h2>
+                    <p>Antal mottager motsvarare antalet e-post utskick och varje svarande motsvarar hur många av dessa mottagare som skickat in sin enkät.</p>
+                </div>      
+            </div>
+        </div>
+
+        <div class="gap-5 my-5">
+            <div class="w-100 my-5">
+                <h2 class="text-center">Hur blev svaren?</h2>
+                <p class="text-center">Här går det att se hur användarna svarade på varje fråga i en sammanställning</p>
+            </div>
+
+            <canvas id="myChart2" class="w-50 h-25"></canvas>
+    
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        const ctx = document.getElementById('myChart');
+        const ctx2 = document.getElementById('myChart2');
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [@Model.AmountRecivers, @Model.AmountRetrivers],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Antal mottagare (Blå) / svarande (Röd)'
+                    }
+                }
+            }
+        });
+
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green'],
+                datasets: [{
+                    data: [12, 19, 3, 5],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Fråga 1'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}

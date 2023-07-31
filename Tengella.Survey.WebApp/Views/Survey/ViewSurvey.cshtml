@@ -1,0 +1,62 @@
+﻿@model Tengella.Survey.Web.Models.SurveyViewModel
+
+@{
+    ViewData["Title"] = "Enkät";
+    DateTime currentDate = DateTime.Now;
+    TimeSpan timeLeft = Model.EndDate - currentDate;
+    int daysLeft = (int)timeLeft.TotalDays;
+}
+
+<div class="d-flex flex-column justify-content-center align-items-center gap-5 min-vh-100">
+    <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
+        <h1 class="h1-responsive font-weight-bold mt-sm-5">@Model.Name</h1>
+        <hr class="hr-light">
+        <h2 class="mb-4 h6">
+            Enkäten avslutas den @Model.EndDate.ToString("dd MMM yyyy") (@daysLeft dagar kvar)
+        </h2>
+    </div>
+
+    <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
+
+        @if (Model.EndDate < DateTime.Now)
+        {
+            <div style="color: red;">Enkäten har passerat slutdatumet.</div>
+        }
+
+        <div id="questionsContainer">
+
+                @for (int i = 0; i < Model.Questions.Count; i++)
+                {
+                    <div class="question-container d-flex flex-column gap-3 mb-4 bg-gradient bg-light rounded p-3" question-index="@i">
+                        <h3 class="fs-5">
+                            @Model.Questions[i].Name
+                        </h3>
+
+                        @if (Model.Questions[i].Options.Count == 0)
+                        {
+                            <div class="optionQuestion">
+                                @Html.TextArea("Question-"+Model.Questions[i].Id, "", 5, 30, new { @class = "form-control", title = "Skriv ditt svar här" })
+                            </div>
+                        }
+                        else
+                        {
+                             <div class="options d-flex flex-row gap-3">
+                                @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
+                                {
+                                    var optionId = $"Question-{Model.Questions[i].Id}-Option-{j}";
+                                    var optionValue = $"Option-{j}";
+                                    var optionName = $"Question-{Model.Questions[i].Id}";
+
+                                    <div class="d-flex gap-3 itemContainer">
+                                        @Html.Label(optionId, Model.Questions[i].Options[j].Name)
+                                        @Html.RadioButton(optionName, optionValue, new { id = optionId, @class = "form-check-input" })
+                                    </div>
+                                }
+                            </div>                
+                        }
+                    </div>
+                }
+        </div>
+    </div>
+
+</div>

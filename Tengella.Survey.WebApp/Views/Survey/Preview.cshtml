@@ -1,0 +1,82 @@
+﻿@model Tengella.Survey.Web.Models.SurveyViewModel
+
+@{
+    ViewData["Title"] = "Förhandsvisning";
+}
+
+@{
+    DateTime currentDate = DateTime.Now;
+    TimeSpan timeLeft = Model.EndDate - currentDate;
+    int daysLeft = (int)timeLeft.TotalDays;
+}
+
+<div class="d-flex align-items-center p-3 my-3 text-white-50 bg-primary bg-gradient rounded box-shadow">
+    <img src=~/icons/survey_icon.svg alt="" width="48" height="48" />
+    <div class="lh-100 mx-3">
+        <h1 class="mb-0 p-0 text-white lh-100">@Model.Name</h1>
+        <small>Enkäten avslutas den @Model.EndDate.ToString("dd MMM yyyy") (@daysLeft dagar kvar)</small>
+    </div>
+</div>
+
+<div id="questionsContainer">
+
+    @for (int i = 0; i < Model.Questions.Count; i++)
+    {
+        <div class="question-container d-flex flex-column gap-3 mb-4 bg-gradient bg-light rounded p-3" question-index="@i">
+            <h2 class="fs-5">
+                @Model.Questions[i].Name
+            </h2>
+
+            @if (Model.Questions[i].Options.Count == 0)
+            {
+                <div class="additionInfo">
+                    @Model.Questions[i].AdditionalInfo
+                </div>
+
+                <div class="optionQuestion">
+                    @Html.TextArea("Question-"+Model.Questions[i].Id, "", 5, 30, new { @class = "form-control", title = "Skriv ditt svar här" })
+                </div>
+            }
+            else
+            {
+                <div class="options d-flex flex-row gap-3">
+                    @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
+                    {
+                        var optionId = $"Question-{Model.Questions[i].Id}-Option-{j}";
+                        var optionValue = $"Option-{j}";
+                        var optionName = $"Question-{Model.Questions[i].Id}";
+
+                        <div class="d-flex gap-3 itemContainer">
+                            @Html.Label(optionId, Model.Questions[i].Options[j].Name)
+                            @Html.RadioButton(optionName, optionValue, new { id = optionId, @class = "form-check-input" })
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@using (Html.BeginForm("Create", "Survey"))
+{
+    @Html.HiddenFor(m => m.Name)
+    @Html.HiddenFor(m => m.SurveyTypeId)
+    @Html.HiddenFor(m => m.StartDate)
+    @Html.HiddenFor(m => m.EndDate)
+
+        @for (int i = 0; i < Model.Questions.Count; i++)
+        {
+        @Html.Hidden($"question-{i}", Model.Questions[i].Name)
+        @Html.Hidden($"additionalInfo-question-{i}", Model.Questions[i].AdditionalInfo)
+                 
+            @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
+            {
+                @Html.HiddenFor(o => o.Questions[i].Options[j].Name, Model.Questions[i].Options[j].Name)
+            }
+        }
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Skapa enkät</button>
+        <button type="submit" name="fromPreview" value="true" class="btn btn-outline-light">Tillbaka</button>
+    </div>
+}

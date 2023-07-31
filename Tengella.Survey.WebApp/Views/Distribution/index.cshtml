@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Tengella.Survey.Web.Models.DistributionViewModel>
+
+@{
+    ViewData["Title"] = "E-postadresser";
+}
+
+<div class="d-flex flex-column justify-content-center align-items-center gap-5 min-vh-100">
+    <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
+        <h1 class="h1-responsive font-weight-bold mt-sm-5">Distribution</h1>
+        <hr class="hr-light">
+        <h2 class="mb-4 h6">
+            Se alla inskrivna kunder. Ändra, ta bort eller lägg till genom att skriva in själv eller importera från fil.
+        </h2>
+        <div class="d-flex gap-2">
+            @Html.ActionLink("Lägg in e-postadresser", "Create", "Distribution", null, new { @class = "btn btn-light"})
+            @Html.ActionLink("Importera e-postadresser", "ImportDistributionList", "Distribution", null, new { @class = "btn btn-outline-light"})
+        </div>
+        
+    </div>
+
+    @if (Model.Count() > 0)
+    {
+        <div class="col-12 my-3 p-3 bg-gradient rounded box-shadow">
+            @foreach (var distribution in Model)
+            {
+                <div class="pt-4 pb-5 border-bottom border-gray d-flex gap-4 flex-wrap justify-content-between">
+                    <div class="d-flex px-3 gap-4">
+                        <img class="rounded" width="64" height="64" alt="" src="~/icons/survey_icon.svg">
+                        <div class="d-flex flex-column align-content-center justify-content-center flex-wrap gap-1">
+                            <strong class="text-info">@Html.ActionLink((@distribution).Name, "ViewDistribution", new { id = distribution.Id}, new { @class = "text-light"}) (@distribution.TypeName)</strong>
+                            <div class="d-flex flex-row gap-3 justify-content-center align-items-center">
+                                <img class="rounded" width="16" height="16" alt="" src="~/icons/calendar.svg">
+                                <small class="text-light">@distribution.Email</small>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 justify-content-evenly col-12 col-xl-auto">
+                        @Html.ActionLink("Ändra", "Edit", new {id = distribution.Id}, new { @class = "btn btn-light" })
+                        @Html.ActionLink("Ta bort", "Delete", new {id = distribution.Id}, new { @class = "btn bg-danger bg-gradient text-white", onclick = "return confirm('Är du säker på att du vill ta bort användaren?');" })
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    
+</div>

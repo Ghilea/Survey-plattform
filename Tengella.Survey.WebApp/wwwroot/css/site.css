@@ -1,0 +1,31 @@
+html,
+body {
+    min-height: 100%;
+    user-select: none;
+}
+
+.top-nav-collapse {
+    background-color: #424f95 !important;
+}
+
+.navbar:not(.top-nav-collapse) {
+    background: transparent !important;
+}
+
+@media (max-width: 991px) {
+    .navbar:not(.top-nav-collapse) {
+        background: #424f95 !important;
+    }
+}
+
+body {
+    background: linear-gradient(to bottom, rgba(78, 84, 105, 0.5), rgba(143, 148, 251, 1)), url('../images/bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
+input[type="checkbox"] {
+    width: 1.5em;
+    height: 1.5em;
+}

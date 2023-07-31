@@ -1,0 +1,54 @@
+﻿@model Tengella.Survey.Web.Models.SendViewModel
+
+@{
+    ViewData["Title"] = "Skicka e-postmall";
+}
+
+<div class="d-flex flex-column justify-content-center align-items-center gap-5 min-vh-100">
+    <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
+        <h1 class="h1-responsive font-weight-bold mt-sm-5">Skicka E-post</h1>
+        <hr class="hr-light">
+        <h2 class="mb-4 h6">
+
+        </h2>
+        <input type="file" name="importedFile" class="form-control-file">
+    </div>
+
+    @if (Model.Distributions.Count() > 0)
+    {
+        <div class="col-12 my-3 p-3 bg-gradient rounded box-shadow">
+
+
+            @using (Html.BeginForm("SendEmails", "Template", new { templateId = Model.TemplateId }, FormMethod.Post, null, new { enctype = "multipart/form-data" }))
+            {
+
+                @foreach (var distribution in Model.Distributions)
+                {
+                    <div class="pt-4 pb-5 border-bottom border-gray d-flex gap-4 flex-wrap justify-content-between">
+                        @{
+                            var isDisabled = @distribution.IsToRecive ? false : true;
+                        }
+
+                        <div class="d-flex px-3 gap-4">
+                            <img class="rounded" width="64" height="64" alt="" src="~/icons/survey_icon.svg">
+                            <div class="d-flex flex-column align-content-center justify-content-center flex-wrap gap-1">
+                                <strong class="text-info"><span class="text-light">@distribution.Name</span> (@distribution.Email)</strong>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 justify-content-evenly col-12 col-xl-auto">
+                            <input type="checkbox" name="selectedEmails" value="@distribution.Id" disabled="@isDisabled" ) />
+                        </div>
+
+                    </div>
+                }
+
+                <div class="my-3">
+                    <button type="submit" class="btn btn-primary bg-gradient">Skicka</button>
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

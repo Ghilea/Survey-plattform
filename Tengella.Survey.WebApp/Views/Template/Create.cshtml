@@ -1,0 +1,52 @@
+﻿@model Tengella.Survey.Web.Models.TemplateViewModel
+
+@{
+    ViewData["Title"] = "Skapa e-postmall";
+}
+
+<div class="d-flex flex-column justify-content-center align-items-center gap-5 min-vh-100">
+    <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
+        <h1 class="h1-responsive font-weight-bold mt-sm-5">Skapa e-postmall</h1>
+        <hr class="hr-light">
+    </div>
+
+<div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+
+        <div class="d-flex flex-column gap-3">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name, "Namn")
+                @Html.TextBoxFor(m => m.Name, new { placeholder = "Skriv in ett namn för e-postmallen", @class = "form-control", required = true})
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Subject, "Ämne")
+                    @Html.TextBoxFor(m => m.Subject, new { placeholder = "Skriv in ett ämne för e-postutskicket", @class = "form-control", required = true})
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Body, "Meddelande")
+                @Html.TextAreaFor(m => m.Body, new { id = "body-textarea", @class = "form-control", rows = 10, required = true })
+            </div>
+
+            <div class="form-group">
+                <div class="text-2xl flex flex-row gap-x-5">
+                    @Html.LabelFor(m => m.SurveyId, "Enkät")
+                    @Html.DropDownListFor(m => m.SurveyId, @Model.ListOfSurvey?.Select(st => new SelectListItem { Value = st.Id.ToString(), Text = st.Name }), "Välj enkät", new { title = "Typ", @id = "surveyType", @class = "form-control", required = true })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-light">Spara</button>
+                    @Html.ActionLink("Gå tillbaka", "Index", "Template", null, new { @class = "btn btn-secondary" })
+            </div>
+        </div>
+    }
+</div>
+</div>
+
+@section Scripts {
+    <script src="~/js/addPlaceholderBody.js"></script>
+}
