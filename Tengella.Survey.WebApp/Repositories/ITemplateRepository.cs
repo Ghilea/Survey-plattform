@@ -8,6 +8,7 @@ namespace Tengella.Survey.WebApp.Repositories
         IEnumerable<Template> GetAllTemplates();
         TemplateViewModel GetTemplateById(int id);
         void AddTemplate(Template template);
+        void AddOrUpdateSendersList(TemplateSenderList templateSenderList);
         void UpdateTemplate(TemplateViewModel template);
         void DeleteTemplate(int id);
     }

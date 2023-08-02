@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tengella.Survey.Data;
 
@@ -11,9 +12,11 @@ using Tengella.Survey.Data;
 namespace Tengella.Survey.Data.Migrations
 {
     [DbContext(typeof(SurveyDbContext))]
-    partial class SurveyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230801155639_Initial9")]
+    partial class Initial9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -386,7 +389,7 @@ namespace Tengella.Survey.Data.Migrations
                     b.Property<int>("DistributionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TemplateId")
+                    b.Property<int>("TemplatesId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

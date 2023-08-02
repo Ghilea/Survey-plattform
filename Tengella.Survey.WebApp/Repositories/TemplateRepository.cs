@@ -49,6 +49,17 @@ namespace Tengella.Survey.WebApp.Repositories
             return viewModel ?? new TemplateViewModel();
         }
 
+        public void AddOrUpdateSendersList(TemplateSenderList templateSenderList)
+        {
+            var existingSender = _surveyDbcontext.TemplateSenderLists.FirstOrDefault(e => e.TemplateId == templateSenderList.TemplateId && e.DistributionId == templateSenderList.DistributionId);
+            
+            if (existingSender == null)
+            {
+                _surveyDbcontext.TemplateSenderLists.Add(templateSenderList);
+                _surveyDbcontext.SaveChanges();
+            }
+        }
+
         public void AddTemplate(Template template)
         {
             _surveyDbcontext.Templates.Add(template);

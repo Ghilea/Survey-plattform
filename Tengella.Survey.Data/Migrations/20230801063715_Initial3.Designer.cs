@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tengella.Survey.Data;
 
@@ -11,9 +12,11 @@ using Tengella.Survey.Data;
 namespace Tengella.Survey.Data.Migrations
 {
     [DbContext(typeof(SurveyDbContext))]
-    partial class SurveyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230801063715_Initial3")]
+    partial class Initial3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,21 +85,6 @@ namespace Tengella.Survey.Data.Migrations
                     b.ToTable("SurveyOptionSurveyQuestion");
                 });
 
-            modelBuilder.Entity("TemplateTemplateSenderList", b =>
-                {
-                    b.Property<int>("SendersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TemplatesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SendersId", "TemplatesId");
-
-                    b.HasIndex("TemplatesId");
-
-                    b.ToTable("TemplateTemplateSenderList");
-                });
-
             modelBuilder.Entity("Tengella.Survey.Data.Models.Distribution", b =>
                 {
                     b.Property<int>("Id")
@@ -125,7 +113,7 @@ namespace Tengella.Survey.Data.Migrations
                     b.Property<int?>("StatisticId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TemplateSenderListId")
+                    b.Property<int>("TemplateIdSent")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -133,8 +121,6 @@ namespace Tengella.Survey.Data.Migrations
                     b.HasIndex("DistributionTypeId");
 
                     b.HasIndex("StatisticId");
-
-                    b.HasIndex("TemplateSenderListId");
 
                     b.ToTable("Distribution");
 
@@ -145,7 +131,8 @@ namespace Tengella.Survey.Data.Migrations
                             DistributionTypeId = 1,
                             Email = "coleman.windler95@ethereal.email",
                             IsToRecive = true,
-                            Name = "Coleman Windler"
+                            Name = "Coleman Windler",
+                            TemplateIdSent = 0
                         },
                         new
                         {
@@ -154,7 +141,8 @@ namespace Tengella.Survey.Data.Migrations
                             Email = "blizzard@company.com",
                             IsToRecive = true,
                             Name = "Activision Blizzard",
-                            OrganizationNumber = "230104"
+                            OrganizationNumber = "230104",
+                            TemplateIdSent = 0
                         });
                 });
 
@@ -375,25 +363,6 @@ namespace Tengella.Survey.Data.Migrations
                     b.ToTable("Templates");
                 });
 
-            modelBuilder.Entity("Tengella.Survey.Data.Models.TemplateSenderList", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DistributionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TemplateId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TemplateSenderLists");
-                });
-
             modelBuilder.Entity("StatisticStatisticQuestion", b =>
                 {
                     b.HasOne("Tengella.Survey.Data.Models.StatisticQuestion", null)
@@ -454,21 +423,6 @@ namespace Tengella.Survey.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TemplateTemplateSenderList", b =>
-                {
-                    b.HasOne("Tengella.Survey.Data.Models.TemplateSenderList", null)
-                        .WithMany()
-                        .HasForeignKey("SendersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Tengella.Survey.Data.Models.Template", null)
-                        .WithMany()
-                        .HasForeignKey("TemplatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Tengella.Survey.Data.Models.Distribution", b =>
                 {
                     b.HasOne("Tengella.Survey.Data.Models.DistributionType", "DistributionTypes")
@@ -480,10 +434,6 @@ namespace Tengella.Survey.Data.Migrations
                     b.HasOne("Tengella.Survey.Data.Models.Statistic", null)
                         .WithMany("Distributions")
                         .HasForeignKey("StatisticId");
-
-                    b.HasOne("Tengella.Survey.Data.Models.TemplateSenderList", null)
-                        .WithMany("Distributions")
-                        .HasForeignKey("TemplateSenderListId");
 
                     b.Navigation("DistributionTypes");
                 });
@@ -509,11 +459,6 @@ namespace Tengella.Survey.Data.Migrations
                 });
 
             modelBuilder.Entity("Tengella.Survey.Data.Models.Statistic", b =>
-                {
-                    b.Navigation("Distributions");
-                });
-
-            modelBuilder.Entity("Tengella.Survey.Data.Models.TemplateSenderList", b =>
                 {
                     b.Navigation("Distributions");
                 });

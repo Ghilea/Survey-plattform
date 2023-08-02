@@ -71,14 +71,16 @@ namespace Tengella.Survey.WebApp.Repositories
         public IActionResult Send(int id)
         {
             var templateById = _TemplateRepository.GetTemplateById(id);
-            
-            if(templateById != null)
+            var senders = _surveyDbcontext.TemplateSenderLists.ToList();
+
+            if (templateById != null)
             {
                 var viewModel = new SendViewModel()
                 {
                     TemplateId = templateById.Id,
                     Survey = _SurveyRepository.GetSurveyById(templateById.SurveyId),
                     Distributions = _DistributionRepository.GetAllEmailAddresses(),
+                    Senders = senders
                 };
 
                 return View(viewModel);
@@ -95,9 +97,9 @@ namespace Tengella.Survey.WebApp.Repositories
                 return NotFound();
             }
 
-            ViewBag.TemplateId = id; // Store the template ID to use in the EmailAddresses view
+            ViewBag.TemplateId = id;
             var emailAddresses = _DistributionRepository.GetAllEmailAddresses();
-            return View("Index", emailAddresses); //make a list to select users here
+            return View("Index", emailAddresses);
         }
 
         [HttpPost]
@@ -120,14 +122,30 @@ namespace Tengella.Survey.WebApp.Repositories
 
             if (selectedEmails != null && selectedEmails.Length > 0)
             {
+                var existingSenders = _surveyDbcontext.TemplateSenderLists.Where(x => x.TemplateId == templateId).ToList();
+                var idsToRemove = existingSenders.Select(x => x.DistributionId).Except(selectedEmails);
+                
+                var sendersToRemove = existingSenders.Where(x => idsToRemove.Contains(x.DistributionId));
+                _surveyDbcontext.TemplateSenderLists.RemoveRange(sendersToRemove);
+
                 foreach (var emailId in selectedEmails)
                 {
                     var emailAddress = _DistributionRepository.GetEmailAddressById(emailId);
+
                     if (emailAddress != null)
                     {
                         SendEmailById(templateId, emailAddress.Id);
+
+                        var addSender = new TemplateSenderList
+                        {
+                            DistributionId = emailAddress.Id,
+                            TemplateId = templateId
+                        };
+
+                        _TemplateRepository.AddOrUpdateSendersList(addSender);
                     }
                 }
+
             }
             else
             {

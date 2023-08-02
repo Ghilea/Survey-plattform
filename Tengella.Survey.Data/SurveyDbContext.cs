@@ -14,6 +14,7 @@ public class SurveyDbContext : DbContext
     public DbSet<SurveyOption> SurveyOptions { get; set; }
     public DbSet<SurveyType> SurveyTypes { get; set; }
     public DbSet<Template> Templates { get; set; }
+    public DbSet<TemplateSenderList> TemplateSenderLists { get; set; }
     public DbSet<Distribution> Distribution { get; set; }
     public DbSet<DistributionType> DistributionTypes { get; set; }
     public DbSet<Statistic> Statistics { get; set; }

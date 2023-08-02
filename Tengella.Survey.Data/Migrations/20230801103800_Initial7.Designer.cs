@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tengella.Survey.Data;
 
@@ -11,9 +12,11 @@ using Tengella.Survey.Data;
 namespace Tengella.Survey.Data.Migrations
 {
     [DbContext(typeof(SurveyDbContext))]
-    partial class SurveyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230801103800_Initial7")]
+    partial class Initial7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -383,15 +386,27 @@ namespace Tengella.Survey.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("DistributionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TemplateId")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TemplatesId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TemplateSenderLists");
+                    b.ToTable("TemplateSenderList");
                 });
 
             modelBuilder.Entity("StatisticStatisticQuestion", b =>
