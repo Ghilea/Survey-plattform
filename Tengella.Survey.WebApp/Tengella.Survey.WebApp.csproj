@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\js\CreateSurvey.js" />
+    <Content Remove="wwwroot\js\statistics.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\statistics.js" />
     <None Include="wwwroot\js\CreateSurvey.js" />
   </ItemGroup>
 

@@ -34,6 +34,7 @@ namespace Tengella.Survey.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SurveyListId = table.Column<int>(type: "int", nullable: false),
                     DistributionId = table.Column<int>(type: "int", nullable: false),
+                    TemplateId = table.Column<int>(type: "int", nullable: false),
                     DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -48,9 +49,10 @@ namespace Tengella.Survey.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StatisticId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StatisticId = table.Column<int>(type: "int", nullable: false),
+                    TemplateId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,7 +66,6 @@ namespace Tengella.Survey.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsChecked = table.Column<bool>(type: "bit", nullable: false),
                     SurveyQuestionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -101,32 +102,17 @@ namespace Tengella.Survey.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Distribution",
+                name: "TemplateSenderLists",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DistributionTypeId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrganizationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsToRecive = table.Column<bool>(type: "bit", nullable: false),
-                    StatisticId = table.Column<int>(type: "int", nullable: true)
+                    TemplateId = table.Column<int>(type: "int", nullable: false),
+                    DistributionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Distribution", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Distribution_DistributionTypes_DistributionTypeId",
-                        column: x => x.DistributionTypeId,
-                        principalTable: "DistributionTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Distribution_Statistics_StatisticId",
-                        column: x => x.StatisticId,
-                        principalTable: "Statistics",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_TemplateSenderLists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -200,6 +186,41 @@ namespace Tengella.Survey.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Distribution",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DistributionTypeId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrganizationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsToRecive = table.Column<bool>(type: "bit", nullable: false),
+                    StatisticId = table.Column<int>(type: "int", nullable: true),
+                    TemplateSenderListId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Distribution", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Distribution_DistributionTypes_DistributionTypeId",
+                        column: x => x.DistributionTypeId,
+                        principalTable: "DistributionTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Distribution_Statistics_StatisticId",
+                        column: x => x.StatisticId,
+                        principalTable: "Statistics",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Distribution_TemplateSenderLists_TemplateSenderListId",
+                        column: x => x.TemplateSenderListId,
+                        principalTable: "TemplateSenderLists",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StatisticSurveyList",
                 columns: table => new
                 {
@@ -257,16 +278,52 @@ namespace Tengella.Survey.Data.Migrations
                     SurveyId = table.Column<int>(type: "int", nullable: false),
                     Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SurveyListsId = table.Column<int>(type: "int", nullable: true)
+                    SurveyListsId = table.Column<int>(type: "int", nullable: true),
+                    StatisticId = table.Column<int>(type: "int", nullable: true),
+                    StatisticQuestionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Templates", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Templates_StatisticsQuestions_StatisticQuestionId",
+                        column: x => x.StatisticQuestionId,
+                        principalTable: "StatisticsQuestions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Templates_Statistics_StatisticId",
+                        column: x => x.StatisticId,
+                        principalTable: "Statistics",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Templates_SurveyList_SurveyListsId",
                         column: x => x.SurveyListsId,
                         principalTable: "SurveyList",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TemplateTemplateSenderList",
+                columns: table => new
+                {
+                    SendersId = table.Column<int>(type: "int", nullable: false),
+                    TemplatesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TemplateTemplateSenderList", x => new { x.SendersId, x.TemplatesId });
+                    table.ForeignKey(
+                        name: "FK_TemplateTemplateSenderList_TemplateSenderLists_SendersId",
+                        column: x => x.SendersId,
+                        principalTable: "TemplateSenderLists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TemplateTemplateSenderList_Templates_TemplatesId",
+                        column: x => x.TemplatesId,
+                        principalTable: "Templates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -290,11 +347,11 @@ namespace Tengella.Survey.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Distribution",
-                columns: new[] { "Id", "DistributionTypeId", "Email", "IsToRecive", "Name", "OrganizationNumber", "StatisticId" },
+                columns: new[] { "Id", "DistributionTypeId", "Email", "IsToRecive", "Name", "OrganizationNumber", "StatisticId", "TemplateSenderListId" },
                 values: new object[,]
                 {
-                    { 1, 1, "coleman.windler95@ethereal.email", true, "Coleman Windler", null, null },
-                    { 2, 2, "blizzard@company.com", true, "Activision Blizzard", "230104", null }
+                    { 1, 1, "coleman.windler95@ethereal.email", true, "Coleman Windler", null, null, null },
+                    { 2, 2, "blizzard@company.com", true, "Activision Blizzard", "230104", null, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -306,6 +363,11 @@ namespace Tengella.Survey.Data.Migrations
                 name: "IX_Distribution_StatisticId",
                 table: "Distribution",
                 column: "StatisticId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Distribution_TemplateSenderListId",
+                table: "Distribution",
+                column: "TemplateSenderListId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StatisticStatisticQuestion_StatisticsId",
@@ -333,9 +395,24 @@ namespace Tengella.Survey.Data.Migrations
                 column: "SurveyQuestionsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Templates_StatisticId",
+                table: "Templates",
+                column: "StatisticId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Templates_StatisticQuestionId",
+                table: "Templates",
+                column: "StatisticQuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Templates_SurveyListsId",
                 table: "Templates",
                 column: "SurveyListsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TemplateTemplateSenderList_TemplatesId",
+                table: "TemplateTemplateSenderList",
+                column: "TemplatesId");
         }
 
         /// <inheritdoc />
@@ -357,22 +434,28 @@ namespace Tengella.Survey.Data.Migrations
                 name: "SurveyOptionSurveyQuestion");
 
             migrationBuilder.DropTable(
-                name: "Templates");
+                name: "TemplateTemplateSenderList");
 
             migrationBuilder.DropTable(
                 name: "DistributionTypes");
-
-            migrationBuilder.DropTable(
-                name: "StatisticsQuestions");
-
-            migrationBuilder.DropTable(
-                name: "Statistics");
 
             migrationBuilder.DropTable(
                 name: "SurveyOptions");
 
             migrationBuilder.DropTable(
                 name: "SurveyQuestions");
+
+            migrationBuilder.DropTable(
+                name: "TemplateSenderLists");
+
+            migrationBuilder.DropTable(
+                name: "Templates");
+
+            migrationBuilder.DropTable(
+                name: "StatisticsQuestions");
+
+            migrationBuilder.DropTable(
+                name: "Statistics");
 
             migrationBuilder.DropTable(
                 name: "SurveyList");

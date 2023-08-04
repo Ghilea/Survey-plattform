@@ -30,14 +30,17 @@ namespace Tengella.Survey.WebApp.Controllers
             _StatisticRepository = statisticRepository;
         }
 
-        public IActionResult Index(int id)
+        public IActionResult Index(int surveyId)
         {
-            var amountRecivers = _StatisticRepository.AmountReciversBySurveyId(id);
-            var amountRetrivers = _StatisticRepository.AmountRetriversBySurveyId(id);
+            var amountRecivers = _StatisticRepository.AmountReciversBySurveyId(surveyId);
+            var amountRetrivers = _StatisticRepository.AmountRetriversBySurveyId(surveyId);
+            var statisticQuestions = _StatisticRepository.GetAnswersById(surveyId);
+
             var model = new StatisticViewModel
             {
                 AmountRecivers = amountRecivers,
                 AmountRetrivers = amountRetrivers,
+                Questions = statisticQuestions,
             };
 
             return View(model);

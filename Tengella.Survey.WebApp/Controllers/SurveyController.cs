@@ -132,7 +132,7 @@ namespace Tengella.Survey.WebApp.Controllers
                 {
                     Name = questionName,
                     Answer = form[key],
-                    StatisticId = statisticId
+                    StatisticId = statisticId,
                 };
 
                 _surveyDbcontext.StatisticsQuestions.Add(statisticQuestion);

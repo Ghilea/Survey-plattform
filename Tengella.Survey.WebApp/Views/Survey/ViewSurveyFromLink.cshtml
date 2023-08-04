@@ -46,7 +46,7 @@
                                 @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
                                 {
                                     var optionId = $"Question-{Model.Questions[i].Id}-Option-{j}";
-                                    var optionValue = $"Option-{j}";
+                                    var optionValue = Model.Questions[i].Options[j].Name;
                                     var optionName = $"Question-{Model.Questions[i].Id}";
 
                                     <div class="d-flex gap-3 itemContainer">

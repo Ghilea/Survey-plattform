@@ -365,9 +365,9 @@ namespace Tengella.Survey.WebApp.Repositories
             {
                 Id = int.TryParse(form["Id"], out var surveysId) ? surveysId : 0,
                 Name = form["Name"],
-                SurveyTypeId = int.Parse(form["SurveyTypeId"]),
-                StartDate = DateTime.Parse(form["StartDate"]),
-                EndDate = DateTime.Parse(form["EndDate"]),
+                SurveyTypeId = int.TryParse(form["SurveyTypeId"], out var surveyId) ? surveyId : 0,
+                StartDate = DateTime.TryParse(form["StartDate"], out var startDate) ? startDate : DateTime.Now,
+                EndDate = DateTime.TryParse(form["EndDate"], out var endDate) ? endDate : DateTime.Now,
                 Questions = questions
             };
 

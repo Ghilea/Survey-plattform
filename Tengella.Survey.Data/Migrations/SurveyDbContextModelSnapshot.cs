@@ -212,6 +212,9 @@ namespace Tengella.Survey.Data.Migrations
                     b.Property<int>("SurveyListId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TemplateId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Statistics");
@@ -358,6 +361,9 @@ namespace Tengella.Survey.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("StatisticId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Subject")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -369,6 +375,8 @@ namespace Tengella.Survey.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StatisticId");
 
                     b.HasIndex("SurveyListsId");
 
@@ -501,6 +509,10 @@ namespace Tengella.Survey.Data.Migrations
 
             modelBuilder.Entity("Tengella.Survey.Data.Models.Template", b =>
                 {
+                    b.HasOne("Tengella.Survey.Data.Models.Statistic", null)
+                        .WithMany("Templates")
+                        .HasForeignKey("StatisticId");
+
                     b.HasOne("Tengella.Survey.Data.Models.SurveyList", "SurveyLists")
                         .WithMany()
                         .HasForeignKey("SurveyListsId");
@@ -511,6 +523,8 @@ namespace Tengella.Survey.Data.Migrations
             modelBuilder.Entity("Tengella.Survey.Data.Models.Statistic", b =>
                 {
                     b.Navigation("Distributions");
+
+                    b.Navigation("Templates");
                 });
 
             modelBuilder.Entity("Tengella.Survey.Data.Models.TemplateSenderList", b =>

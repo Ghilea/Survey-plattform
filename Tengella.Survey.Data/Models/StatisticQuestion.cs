@@ -8,10 +8,9 @@
         }
 
         public int Id { get; set; }
-        public int StatisticId { get; set; } // Foreign key to CreatedSurvey
         public string Name { get; set; } = string.Empty;
         public string Answer { get; set; } = string.Empty;
-
-        public ICollection<Statistic> Statistics { get; set; } // Navigation property to the associated CreatedSurvey
+        public int StatisticId { get; set; } // Foreign key
+        public ICollection<Statistic> Statistics { get; set; } // Navigation property
     }
 }

@@ -7,7 +7,6 @@ namespace Tengella.Survey.WebApp.Repositories
         IEnumerable<SurveyViewModel> GetAllSurveys();
 
         SurveyViewModel GetSurveyById(int id);
-
         void CopySurveyById(int id);
         void AddSurvey(SurveyViewModel survey);
         void UpdateSurvey(SurveyViewModel survey);

@@ -199,6 +199,7 @@ namespace Tengella.Survey.WebApp.Repositories
                 {
                     DistributionId = emailAddress.Id,
                     SurveyListId = template.SurveyId,
+                    TemplateId = template.Id,
                     DateAdded = DateTime.Now,
                     DateUpdated = DateTime.Now,
                 };

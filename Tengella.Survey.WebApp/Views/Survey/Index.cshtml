@@ -64,7 +64,7 @@
                     <div class="d-flex align-items-center gap-2 justify-content-evenly col-12 col-xl-auto">
                         @Html.ActionLink("Kopiera", "Copy", new {id = survey.Id}, new { @class = "btn btn-primary"})
                         @Html.ActionLink("Ändra", "Edit", new {id = survey.Id}, new { @class = "btn btn-light" })
-                        @Html.ActionLink("Statistik", "Index", "Statistic", new {id = survey.Id}, new { @class = "btn btn-primary bg-gradient" })
+                        @Html.ActionLink("Statistik", "Index", "Statistic", new {surveyId = survey.Id}, new { @class = "btn btn-primary bg-gradient" })
                         @Html.ActionLink("Ta bort", "Delete", new {id = survey.Id}, new { @class = "btn bg-danger bg-gradient text-white", onclick = "return confirm('Är du säker på att du vill ta bort enkäten?');" })
                     </div>
                 </div>
