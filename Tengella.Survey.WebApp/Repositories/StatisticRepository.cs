@@ -119,12 +119,27 @@ namespace Tengella.Survey.WebApp.Repositories
 
             foreach (var answer in answers)
             {
-                //Id = int.TryParse(form[$"Id.Question[{questionIndex}]"], out var questionId) ? questionId : 0,
                 totalSum += (int.TryParse(answer.Key, out var answerValue) ? answerValue * answer.Value : 0);
                 toBeDivided += answer.Value;  
             }
 
             return (totalSum / toBeDivided);
+        }
+
+        public double GetTrendByQuestionName(string questionName)
+        {
+            var statisticQuestions = _surveyDbcontext.StatisticsQuestions.Where(x => x.Name == questionName).ToList();
+
+            foreach (var item in statisticQuestions)
+            {
+                var statisticAddedDate = _surveyDbcontext.Statistics.Where(x => x.Id == item.StatisticId);
+
+                /*if (item.Added)
+                {
+
+                }*/
+            }
+            return 0;
         }
 
         public void AddStatistic(Statistic statistic)

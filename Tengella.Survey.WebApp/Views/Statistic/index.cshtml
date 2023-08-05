@@ -60,6 +60,32 @@
                     {
                         <small class="text-light">Snittvärde för frågan är @questionStat.AverageRating</small>
                     }
+                    @if (int.TryParse(questionStat.Answer, out _))
+                    {
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#questionTrendModal-@questionStat.Id">
+                            Show Trend
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="questionTrendModal-@questionStat.Id" tabindex="-1" role="dialog" aria-labelledby="questionTrendModalLabel-@questionStat.Id" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="questionTrendModalLabel-@questionStat.Id">Trend for @questionStat.Name</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <canvas id="questionTrendChart-@questionStat.Id" width="400" height="200"></canvas>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
 
                 <canvas class="h-25 chart" data-question-id="@questionIndex" id="chart-@questionIndex"></canvas>
@@ -67,6 +93,7 @@
                 questionIndex++;
             }
         </div>
+
     </div>
 </div>
 

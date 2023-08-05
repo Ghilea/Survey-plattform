@@ -18,7 +18,15 @@ namespace Tengella.Survey.Web.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public double AverageRating { get; set; }
+        public string Answer { get; set; } = string.Empty;
+        public List<QuestionTrendViewModel> TrendData { get; set; } = new List<QuestionTrendViewModel>();
         public Dictionary<string, int> Answers { get; set; } = new Dictionary<string, int>();
+    }
+
+    public class QuestionTrendViewModel
+    {
+        public DateTime Date { get; set; }
+        public double Value { get; set; }
     }
 
 }
