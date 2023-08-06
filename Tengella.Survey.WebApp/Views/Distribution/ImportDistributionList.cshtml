@@ -6,17 +6,17 @@
         <hr class="hr-light">
     </div>
 
-<div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
-    @using (Html.BeginForm("ImportedFromFile", "Distribution", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <div class="form-group">
-            <input type="file" id="file" name="File" class="form-control-file">
-        </div>
+    <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
+        @using (Html.BeginForm("ImportFile", "Distribution", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-group">
+                    <input type="file" name="importedFile" class="form-control-file">
+            </div>
 
-        <div class="form-group my-5">
-            <button type="submit" class="btn btn-light">Spara</button>
-            @Html.ActionLink("Gå tillbaka", "Index", "Distribution", null, new { @class = "btn btn-secondary"})
-        </div>
-    }
-</div>
+            <div class="form-group my-5">
+                <button type="submit" class="btn btn-light">Spara</button>
+                @Html.ActionLink("Gå tillbaka", "Index", "Distribution", null, new { @class = "btn btn-secondary"})
+            </div>
+        }
+    </div>
 </div>

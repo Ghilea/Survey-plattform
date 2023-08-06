@@ -133,27 +133,33 @@ namespace Tengella.Survey.WebApp.Repositories
 
             var statisticQuestions = _surveyDbcontext.StatisticsQuestions.Where(x => x.Name == questionName).ToList();
 
-            foreach (var item in statisticQuestions)
-            {
-                var statisticAddedDate = _surveyDbcontext.Statistics.FirstOrDefault(x => x.Id == item.StatisticId);
+            var groupedStatistics = statisticQuestions
+                .Join(_surveyDbcontext.Statistics,
+                      question => question.StatisticId,
+                      statistic => statistic.Id,
+                      (question, statistic) => new { Question = question, Statistic = statistic })
+                .GroupBy(x => x.Statistic.DateUpdated.Date) // Group by the date part of DateUpdated
+                .Select(group => new
+                {
+                    Date = group.Key,
+                    ValueSum = group.Sum(item => double.TryParse(item.Question.Answer, out var result) ? result : 0),
+                    Count = group.Count()
+                });
 
+            var mostCommonValue = groupedStatistics
+                .OrderByDescending(group => group.Count)
+                .FirstOrDefault()?.ValueSum;
+
+            foreach (var data in groupedStatistics)
+            {
                 var addModel = new QuestionTrendViewModel
                 {
-                    Date = statisticAddedDate.DateUpdated,
-                    Value = double.TryParse(item.Answer, out var result) ? result : 0,
+                    Date = data.Date,
+                    Value = data.ValueSum / data.Count,
+                    CommonValue = mostCommonValue / statisticQuestions.Count() ?? 0
                 };
 
                 trendData.Add(addModel);
-            }
-
-            var mostCommonValue = trendData
-                .GroupBy(data => data.Value)
-                .OrderByDescending(group => group.Count())
-                .FirstOrDefault()?.Key;
-
-            foreach (var data in trendData)
-            {
-                data.CommonValue = (double)mostCommonValue;
             }
 
             return trendData;

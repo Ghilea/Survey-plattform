@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-    console.log(questions)
     let chartType = 'bar';
     window.myCharts = {};
     let chartIndex = 0;
@@ -105,7 +104,9 @@ $(document).ready(function () {
         const trendSortLabels = trendData.map(item => new Date(item.date).toLocaleString('default', { month: 'short', day: '2-digit', year: '2-digit' }));
         const trendSortData = trendData.map(item => item.value);
 
-        createTrendChart(chartIndex, trendSortLabels, trendSortData);
+        if (trendSortData[0] > 0) {
+            createTrendChart(chartIndex, trendSortLabels, trendSortData);
+        }
 
         chartIndex++;
     });

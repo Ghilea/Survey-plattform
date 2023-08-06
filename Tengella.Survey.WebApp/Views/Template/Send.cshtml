@@ -8,10 +8,6 @@
     <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
         <h1 class="h1-responsive font-weight-bold mt-sm-5">Skicka E-post</h1>
         <hr class="hr-light">
-        <h2 class="mb-4 h6">
-
-        </h2>
-        <input type="file" name="importedFile" class="form-control-file">
     </div>
 
     @if (Model.Distributions.Count() > 0)
@@ -50,8 +46,13 @@
                         @Html.CheckBox("sendToLastTimeSenders", false, new { Value = true, id = "sendToLastTimeSenders" })
                     </div>
                     
-                    <button type="submit" class="btn btn-primary bg-gradient">Skicka</button>
+                    <div class="d-flex gap-3 align-items-center">
+                        <button type="submit" class="btn btn-primary bg-gradient">Skicka</button>
+                        <input type="file" name="importedFile" class="form-control-file">
+                    </div>
+                    
                 </div>
+
             }
 
         </div>

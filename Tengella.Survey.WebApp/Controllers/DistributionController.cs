@@ -129,5 +129,22 @@ namespace Tengella.Survey.WebApp.Repositories
             return View(distribution);
         }
 
+        [HttpPost]
+        public IActionResult ImportFile(IFormFile importedFile)
+        {
+            if (importedFile != null)
+            {
+                var importedEmails = _DistributionRepository.ImportedFromFile(importedFile);
+
+                foreach (var emailAddress in importedEmails)
+                {
+                    var getEmail = _DistributionRepository.GetEmailAddressByAddress(emailAddress.Email);
+                }
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

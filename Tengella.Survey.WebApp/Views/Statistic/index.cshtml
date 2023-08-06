@@ -52,48 +52,47 @@
             @foreach (var questionStat in Model.Questions)
             {
                
-                    <div class="my-5">
-                        <h3 class="h5 text-center text-light">@questionStat.Name</h3>
-                    </div>
+                <div class="my-5">
+                    <h3 class="h5 text-center text-light">@questionStat.Name</h3>
+                </div>
 
-                    @if (questionStat.HasNumericAnswer)
-                    {
-                        <div class="bg-gradient rounded p-3">
-                            @{
-                                var trendData = Model.Questions[questionIndex].TrendData;
-                                var commonValue = trendData.FirstOrDefault()?.CommonValue;
-                                var commonValueCount = trendData.Count(data => data.Value == commonValue);
-                            }
+                @if (questionStat.HasNumericAnswer)
+                {
+                    <div class="bg-gradient rounded p-3">
+                        @{
+                            var trendData = Model.Questions[questionIndex].TrendData;
+                            var commonValue = trendData.FirstOrDefault()?.CommonValue;
+                            var commonValueCount = trendData.Count(data => data.Value == commonValue);
+                        }
 
-                            <h4 class="text-light">Trend</h4>
-                            <div class="d-flex flex-row flex-wrap justify-content-start align-items-center py-3">
-                                <small class="text-light">
-                                    De flesta användare väljer <strong>@(commonValue)</strong> på frågan (totalt <strong>@commonValueCount</strong>) mellan denna vecka.
-                                    Förra veckan valde flesta användare x på frågan (total x)
-                                </small>
-                            </div>
+                        <h4 class="text-light">Trend</h4>
+                        <div class="d-flex flex-row flex-wrap justify-content-start align-items-center py-3">
+                            <small class="text-light">
+                                Medelvärdet för denna fråga ligger på <strong>@(commonValue)</strong>.
+                            </small>
+                        </div>
 
-                            <hr class="mb-5 hr-light">
+                        <hr class="mb-5 hr-light">
 
-                            <canvas id="questionTrendChart-@questionStat.Id" class="mb-5"></canvas>
-                        </div> 
-                    }
+                        <canvas id="questionTrendChart-@questionStat.Id" class="mb-5"></canvas>
+                    </div> 
+                }
 
+                <div class="bg-gradient rounded p-3">
                     @if (questionStat.AverageRating > 0)
                     {
-                        <div class="bg-gradient rounded p-3">
-                            <h4 class="text-light">Svarande</h4>
-                            <div class="d-flex flex-row flex-wrap justify-content-start align-items-center py-3">
-                                <small class="text-light">
-                                    Snittvärde: @questionStat.AverageRating
-                                </small>
-                            </div>
-
-                            <hr class="mb-5 hr-light">
-
-                            <canvas class="h-25 chart" data-question-id="@questionIndex" id="chart-@questionIndex"></canvas>
+                        <h4 class="text-light">Svarande</h4>
+                        <div class="d-flex flex-row flex-wrap justify-content-start align-items-center py-3">
+                            <small class="text-light">
+                                Snittvärde: @questionStat.AverageRating
+                            </small>
                         </div>
+
+                        <hr class="mb-5 hr-light">
                     }
+                    <canvas class="h-25 chart" data-question-id="@questionIndex" id="chart-@questionIndex"></canvas>
+                </div>
+                
 
                 <hr class="my-5 hr-light">
                 questionIndex++;
