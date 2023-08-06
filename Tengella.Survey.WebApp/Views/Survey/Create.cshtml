@@ -10,7 +10,8 @@
         <hr class="hr-light">
     </div>
 
-    <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
+    <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow position-relative">
+        <div id="createInfo" class="position-absolute end-0 top-0 mt-1 me-1" data-title="dataCreateInfo">ℹ️</div>
         @using (Html.BeginForm("Create", "Survey"))
         {
             @Html.ValidationSummary(true)
@@ -23,19 +24,19 @@
 
                 <div class="form-group">
                     <div class="text-2xl flex flex-row gap-x-5">
-                            @Html.LabelFor(m => m.SurveyTypeId, "Typ av enkät", new { @class = "text-light"})
-                        @Html.DropDownListFor(m => m.SurveyTypeId, @Model.ListOfType?.Select(st => new SelectListItem { Value = st.Id.ToString(), Text = st.Name }), "Välj typ", new { title = "Typ", @id = "surveyType", @class = "form-control", required = true })
+                        @Html.LabelFor(m => m.SurveyTypeId, "Typ av enkät", new { @class = "text-light"})
+                        @Html.DropDownListFor(m => m.SurveyTypeId, @Model.ListOfType?.Select(st => new SelectListItem { Value = st.Id.ToString(), Text = st.Name }), "Välj typ", new { title = "Typ", @id = "surveyType", @class = "form-control form-select", required = true })
                     </div>
                 </div>
 
                 <div class="d-flex form-group gap-3">
                     <div class="w-50">
-                            @Html.LabelFor(m => m.StartDate, "Startdatum", new { @class = "text-light"})
-                            @Html.TextBoxFor(m => m.StartDate, "{0:s}", new { @class = "form-control", @type = "datetime-local", @min=@DateTime.Now.ToString("yyyy-MM-ddThh:mm"), required = true })
+                        @Html.LabelFor(m => m.StartDate, "Startdatum", new { @class = "text-light"})
+                        @Html.TextBoxFor(m => m.StartDate, "{0:s}", new { @class = "form-control", @type = "datetime-local", @min=@DateTime.Now.ToString("yyyy-MM-ddThh:mm"), required = true })
                     </div>
                     <div class="w-50">
                             @Html.LabelFor(m => m.EndDate, "Slutdatum", new { @class = "text-light"})
-                            @Html.TextBoxFor(m => m.EndDate, "{0:s}", new { @class = "form-control", @type = "datetime-local", @min=@DateTime.Now.ToString("yyyy-MM-ddThh:mm"), required = true })
+                        @Html.TextBoxFor(m => m.EndDate, "{0:s}", new { @class = "form-control", @type = "datetime-local", required = true, @id = "endDateInput" })
                     </div>
 
                 </div>
@@ -62,7 +63,18 @@
 
 @section Scripts {
     <script>
-        var surveyQuestions = @Html.Raw(Json.Serialize(Model.Questions));
+        const surveyQuestions = @Html.Raw(Json.Serialize(Model.Questions));
+
+        const infoText = `
+                Namn: Skriv ett namn för din enkät. &#10;&#13;
+                Typ av enkät: I rullistan finns flera val för att kategorisera din enkät. &#10;&#13; 
+                Datum: Ange ett startdatum och slutdatum, kom ihåg att lägga till tid förutom ett datum. &#10;&#13; 
+                Frågor: Klicka på knappen för att lägga till frågor: &#10;&#13; 
+                Alternativ: Detta är flervalsfrågor, skriv in eget namn för varje alternativ.&#10;&#13;";
+        `
+
+        $("#createInfo").attr("dataCreateInfo", infoText)
+
     </script>
     <script defer src="~/js/CreateSurvey.js"></script>
 }

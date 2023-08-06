@@ -36,7 +36,7 @@
                     </div>
                     <div class="w-50">
                         @Html.LabelFor(m => m.EndDate, "Slutdatum", new { @class = "text-light"})
-                        @Html.TextBoxFor(m => m.EndDate, "{0:s}", new { @class = "form-control", @type = "datetime-local", @min=@DateTime.Now.ToString("yyyy-MM-ddThh:mm"), required = true })
+                        @Html.TextBoxFor(m => m.EndDate, "{0:s}", new { @class = "form-control form-select", @type = "datetime-local", required = true, @id = "endDateInput" })
                     </div>
 
                 </div>
@@ -62,7 +62,7 @@
 
 @section Scripts {
     <script>
-        var surveyQuestions = @Html.Raw(Json.Serialize(Model.Questions));
+        const surveyQuestions = @Html.Raw(Json.Serialize(Model.Questions));
 
         console.log(surveyQuestions)
     </script>

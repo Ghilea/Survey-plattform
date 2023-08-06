@@ -29,3 +29,32 @@ input[type="checkbox"] {
     width: 1.5em;
     height: 1.5em;
 }
+
+[data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+
+[data-title]:after {
+    content: attr(data-title);
+    background-color: whitesmoke;
+    border-radius: 0.3em;
+    color: black;
+    position: absolute;
+    padding: 1px 5px 2px 5px;
+    top: -1.6em;
+    right: 100%;
+    width: 350px;
+    white-space: pre;
+    display: inline-block;
+    box-shadow: 1px 1px 3px #222222;
+    opacity: 0;
+    border: 1px solid #111111;
+    z-index: 99999;
+    visibility: hidden;
+}
+
+[data-title] {
+    position: relative;
+}
