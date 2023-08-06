@@ -9,12 +9,9 @@
     <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
         <h1 class="h1-responsive font-weight-bold mt-sm-5">Statistik</h1>
         <hr class="hr-light">
-        <h2 class="mb-4 h6">
-            
-        </h2>
     </div>
 
-    <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
+    <div class="col-12 col-xxl-6 my-3 p-5 bg-gradient rounded box-shadow">
         <div class="d-flex flex-row gap-5 my-5">
             <canvas id="chart-amount" class="w-50 h-25"></canvas>
             <div class="w-50">
@@ -54,42 +51,51 @@
             
             @foreach (var questionStat in Model.Questions)
             {
-                <div class="my-5">
-                    <h3 class="h5 text-center text-light">@questionStat.Name</h3>
+               
+                    <div class="my-5">
+                        <h3 class="h5 text-center text-light">@questionStat.Name</h3>
+                    </div>
+
+                    @if (questionStat.HasNumericAnswer)
+                    {
+                        <div class="bg-gradient rounded p-3">
+                            @{
+                                var trendData = Model.Questions[questionIndex].TrendData;
+                                var commonValue = trendData.FirstOrDefault()?.CommonValue;
+                                var commonValueCount = trendData.Count(data => data.Value == commonValue);
+                            }
+
+                            <h4 class="text-light">Trend</h4>
+                            <div class="d-flex flex-row flex-wrap justify-content-start align-items-center py-3">
+                                <small class="text-light">
+                                    De flesta användare väljer <strong>@(commonValue)</strong> på frågan (totalt <strong>@commonValueCount</strong>) mellan denna vecka.
+                                    Förra veckan valde flesta användare x på frågan (total x)
+                                </small>
+                            </div>
+
+                            <hr class="mb-5 hr-light">
+
+                            <canvas id="questionTrendChart-@questionStat.Id" class="mb-5"></canvas>
+                        </div> 
+                    }
+
                     @if (questionStat.AverageRating > 0)
                     {
-                        <small class="text-light">Snittvärde för frågan är @questionStat.AverageRating</small>
-                    }
-                    @if (int.TryParse(questionStat.Answer, out _))
-                    {
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#questionTrendModal-@questionStat.Id">
-                            Show Trend
-                        </button>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="questionTrendModal-@questionStat.Id" tabindex="-1" role="dialog" aria-labelledby="questionTrendModalLabel-@questionStat.Id" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="questionTrendModalLabel-@questionStat.Id">Trend for @questionStat.Name</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <canvas id="questionTrendChart-@questionStat.Id" width="400" height="200"></canvas>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
+                        <div class="bg-gradient rounded p-3">
+                            <h4 class="text-light">Svarande</h4>
+                            <div class="d-flex flex-row flex-wrap justify-content-start align-items-center py-3">
+                                <small class="text-light">
+                                    Snittvärde: @questionStat.AverageRating
+                                </small>
                             </div>
+
+                            <hr class="mb-5 hr-light">
+
+                            <canvas class="h-25 chart" data-question-id="@questionIndex" id="chart-@questionIndex"></canvas>
                         </div>
                     }
-                </div>
 
-                <canvas class="h-25 chart" data-question-id="@questionIndex" id="chart-@questionIndex"></canvas>
-
+                <hr class="my-5 hr-light">
                 questionIndex++;
             }
         </div>

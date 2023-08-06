@@ -1,4 +1,6 @@
 $(document).ready(function () {
+
+    console.log(questions)
     let chartType = 'bar';
     window.myCharts = {};
     let chartIndex = 0;
@@ -25,7 +27,7 @@ $(document).ready(function () {
     });
 
     function createTrendChart(canvasId, labels, data) {
-        const ctx = document.getElementById(canvasId);
+        const ctx = document.getElementById('questionTrendChart-' + canvasId);
 
         const trendChart = new Chart(ctx, {
             type: 'line',
@@ -33,24 +35,19 @@ $(document).ready(function () {
                 labels: labels,
                 datasets: [{
                     data: data,
-                    label: 'Trend for ' + canvasId, // Use the question name as the dataset label
                     borderWidth: 1,
-                    borderColor: 'blue',
-                    backgroundColor: 'transparent',
+                    borderColor: 'white',
+                    backgroundColor: 'white',
                 }]
             },
             options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
                 responsive: true,
                 scales: {
-                    x: {
-                        type: 'time', // Use 'time' scale for X-axis
-                        time: {
-                            unit: 'day', // Show data points per day
-                            displayFormats: {
-                                day: 'MMM D', // Display date format for day
-                            }
-                        }
-                    },
                     y: {
                         beginAtZero: true
                     }
@@ -94,11 +91,21 @@ $(document).ready(function () {
     }
 
     $.each(questions, function (index, questionStat) {
+
+        //question
         const labels = Object.getOwnPropertyNames(questionStat.answers);
         const data = Object.values(questionStat.answers);
 
         const chartId = 'chart-' + chartIndex;
         window.myCharts[chartId] = createChart(chartId, chartType, labels, data);
+
+        //trend
+        const trendData = questions[chartIndex].trendData;
+
+        const trendSortLabels = trendData.map(item => new Date(item.date).toLocaleString('default', { month: 'short', day: '2-digit', year: '2-digit' }));
+        const trendSortData = trendData.map(item => item.value);
+
+        createTrendChart(chartIndex, trendSortLabels, trendSortData);
 
         chartIndex++;
     });
@@ -111,25 +118,6 @@ $(document).ready(function () {
             const labels = Object.getOwnPropertyNames(questions[chartId.substring(6)].answers);
             const data = Object.values(questions[chartId.substring(6)].answers);
             window.myCharts[chartId] = createChart(chartId, chartType, labels, data);
-        });
-    });
-
-    // Click event for trend buttons
-    $('.btn-primary').on('click', function () {
-        const questionId = $(this).data('question-id');
-        const questionStat = window.myCharts[questionId];
-
-        // Get trend data from the selected question
-        const trendData = questionStat.TrendData;
-
-        // Extract labels and data arrays from the trend data
-        const labels = trendData.map(item => item.date);
-        const data = trendData.map(item => item.value);
-
-        // Create and show the trend chart in the modal
-        const trendChart = createTrendChart('questionTrendChart-' + questionId, labels, data);
-        $('#questionTrendModal-' + questionId).on('shown.bs.modal', function () {
-            trendChart.update(); // Update the chart after the modal is shown
         });
     });
 });

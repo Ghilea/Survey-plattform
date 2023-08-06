@@ -102,7 +102,8 @@ namespace Tengella.Survey.WebApp.Repositories
                 {
                     Name = entry.Key,
                     Answers = entry.Value,
-                    AverageRating = GetAverageRating(entry.Value)
+                    AverageRating = GetAverageRating(entry.Value),
+                    TrendData = GetTrendByQuestionName(entry.Key)
                 };
 
                 questionStatistics.Add(addModel);
@@ -126,20 +127,36 @@ namespace Tengella.Survey.WebApp.Repositories
             return (totalSum / toBeDivided);
         }
 
-        public double GetTrendByQuestionName(string questionName)
+        private List<QuestionTrendViewModel> GetTrendByQuestionName(string questionName)
         {
+            var trendData = new List<QuestionTrendViewModel>();
+
             var statisticQuestions = _surveyDbcontext.StatisticsQuestions.Where(x => x.Name == questionName).ToList();
 
             foreach (var item in statisticQuestions)
             {
-                var statisticAddedDate = _surveyDbcontext.Statistics.Where(x => x.Id == item.StatisticId);
+                var statisticAddedDate = _surveyDbcontext.Statistics.FirstOrDefault(x => x.Id == item.StatisticId);
 
-                /*if (item.Added)
+                var addModel = new QuestionTrendViewModel
                 {
+                    Date = statisticAddedDate.DateUpdated,
+                    Value = double.TryParse(item.Answer, out var result) ? result : 0,
+                };
 
-                }*/
+                trendData.Add(addModel);
             }
-            return 0;
+
+            var mostCommonValue = trendData
+                .GroupBy(data => data.Value)
+                .OrderByDescending(group => group.Count())
+                .FirstOrDefault()?.Key;
+
+            foreach (var data in trendData)
+            {
+                data.CommonValue = (double)mostCommonValue;
+            }
+
+            return trendData;
         }
 
         public void AddStatistic(Statistic statistic)
