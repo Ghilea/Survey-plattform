@@ -58,3 +58,35 @@ input[type="checkbox"] {
 [data-title] {
     position: relative;
 }
+
+.delete-image-button, .add-image-button, .statistic-image-button, .edit-image-button, .copy-image-button, .send-image-button {
+    display: inline-block;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+    .delete-image-button::before {
+        content: url("/icons/trash_can_icon.svg");
+    }
+
+    .add-image-button::before {
+        content: url("/icons/add.svg");
+    }
+
+    .statistic-image-button::before {
+        content: url("/icons/statistic.svg");
+    }
+
+    .edit-image-button::before {
+        content: url("/icons/edit.svg");
+    }
+
+    .copy-image-button::before {
+        content: url("/icons/copy_icon.svg");
+    }
+
+    .send-image-button::before {
+        content: url("/icons/envelope_email_icon.svg");
+    }

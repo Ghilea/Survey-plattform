@@ -4,7 +4,7 @@
     ViewData["Title"] = "E-postadresser";
 }
 
-<div class="d-flex flex-column justify-content-center align-items-center gap-5 min-vh-100">
+<div class="d-flex flex-column justify-content-start align-items-center gap-5 min-vh-100 my-5">
     <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
         <h1 class="h1-responsive font-weight-bold mt-sm-5">Distribution</h1>
         <hr class="hr-light">
@@ -20,25 +20,32 @@
 
     @if (Model.Count() > 0)
     {
-        <div class="col-12 my-3 p-3 bg-gradient rounded box-shadow">
+        <div class="col-12 my-3 bg-gradient rounded box-shadow">
             @foreach (var distribution in Model)
             {
-                <div class="pt-4 pb-5 border-bottom border-gray d-flex gap-4 flex-wrap justify-content-between">
-                    <div class="d-flex px-3 gap-4">
-                        <img class="rounded" width="64" height="64" alt="" src="~/icons/survey_icon.svg">
+                <div class="py-4 border-bottom border-gray d-flex gap-5 flex-wrap justify-content-between align-items-center">
+                    <div class="d-flex px-3 gap-4 align-items-center">
+                        @if (distribution.TypeName == "Privatperson")
+                        {
+                            <img class="ms-3" width="32" height="32" alt="" src="~/icons/id_card_icon.svg">
+                        }
+                        else
+                        {
+                            <img class="ms-3" width="32" height="32" alt="" src="~/icons/globe_icon.svg">
+                        }
                         <div class="d-flex flex-column align-content-center justify-content-center flex-wrap gap-1">
                             <strong class="text-info">@Html.ActionLink((@distribution).Name, "ViewDistribution", new { id = distribution.Id}, new { @class = "text-light"}) (@distribution.TypeName)</strong>
-                            <div class="d-flex flex-row gap-3 justify-content-center align-items-center">
-                                <img class="rounded" width="16" height="16" alt="" src="~/icons/calendar.svg">
+                            <div class="d-flex flex-row gap-3 justify-content-start align-items-center">
+                                <img class="rounded" width="16" height="16" alt="" src="~/icons/envelope_email_icon.svg">
                                 <small class="text-light">@distribution.Email</small>
                             </div>
                         </div>
 
                     </div>
 
-                    <div class="d-flex align-items-center gap-2 justify-content-evenly col-12 col-xl-auto">
-                        @Html.ActionLink("Ändra", "Edit", new {id = distribution.Id}, new { @class = "btn btn-light" })
-                        @Html.ActionLink("Ta bort", "Delete", new {id = distribution.Id}, new { @class = "btn bg-danger bg-gradient text-white", onclick = "return confirm('Är du säker på att du vill ta bort användaren?');" })
+                    <div class="d-flex flex-xl-column align-items-center gap-3 justify-content-end col-xl-auto px-3 py-2 bg-gradient rounded-start">
+                        @Html.ActionLink("", "Edit", new {id = distribution.Id}, new { @class = "btn edit-image-button", title = "Ändra" })
+                        @Html.ActionLink("", "Delete", new {id = distribution.Id}, new { @class = "btn delete-image-button", title = "Ta bort", onclick = "return confirm('Är du säker på att du vill ta bort användaren?');" })
                     </div>
                 </div>
             }

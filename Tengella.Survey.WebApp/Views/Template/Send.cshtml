@@ -4,7 +4,7 @@
     ViewData["Title"] = "Skicka e-postmall";
 }
 
-<div class="d-flex flex-column justify-content-center align-items-center gap-5 min-vh-100">
+<div class="d-flex flex-column justify-content-start align-items-center gap-5 min-vh-100 my-5">
     <div class="col-md-6 text-light text-center text-md-left fadeInLeft" data-wow-delay="0.3s">
         <h1 class="h1-responsive font-weight-bold mt-sm-5">Skicka E-post</h1>
         <hr class="hr-light">
@@ -20,16 +20,27 @@
 
                 @foreach (var distribution in Model.Distributions)
                 {
-                    <div class="pt-4 pb-5 border-bottom border-gray d-flex gap-4 flex-wrap justify-content-between">
+                    <div class="py-4 border-bottom border-gray d-flex gap-5 flex-wrap justify-content-between align-items-center">
                         @{
                             var isDisabled = @distribution.IsToRecive ? false : true;
                             var isMatching = Model.Senders.Any(x => x.TemplateId == Model.TemplateId && x.DistributionId == distribution.Id);
                         }
 
-                        <div class="d-flex px-3 gap-4">
-                            <img class="rounded" width="64" height="64" alt="" src="~/icons/survey_icon.svg">
+                        <div class="d-flex px-3 gap-4 align-items-center">
+                            @if (distribution.DistributionTypeId == 1)
+                            {
+                                <img class="ms-3" width="32" height="32" alt="" src="~/icons/id_card_icon.svg">
+                            }
+                            else
+                            {
+                                <img class="ms-3" width="32" height="32" alt="" src="~/icons/globe_icon.svg">
+                            }
                             <div class="d-flex flex-column align-content-center justify-content-center flex-wrap gap-1">
-                                <strong class="text-info"><span class="text-light">@distribution.Name</span> (@distribution.Email)</strong>
+                                <strong class="text-info">@Html.ActionLink((@distribution).Name, "ViewDistribution", new { id = distribution.Id}, new { @class = "text-light"}) (@(distribution.DistributionTypeId == 1 ? "Privatperson" : "Företag"))</strong>
+                                <div class="d-flex flex-row gap-3 justify-content-start align-items-center">
+                                    <img class="rounded" width="16" height="16" alt="" src="~/icons/envelope_email_icon.svg">
+                                    <small class="text-light">@distribution.Email</small>
+                                </div>
                             </div>
                         </div>
 
