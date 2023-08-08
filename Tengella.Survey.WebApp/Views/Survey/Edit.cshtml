@@ -29,16 +29,14 @@
                     </div>
                 </div>
 
-                <div class="d-flex form-group gap-3">
-                    <div class="w-50">
-                        @Html.LabelFor(m => m.StartDate, "Startdatum", new { @class = "text-light"})
-                        @Html.TextBoxFor(m => m.StartDate, "{0:s}", new { @class = "form-control", @type = "datetime-local", @min=@DateTime.Now.ToString("yyyy-MM-ddThh:mm"), required = true })
-                    </div>
-                    <div class="w-50">
-                        @Html.LabelFor(m => m.EndDate, "Slutdatum", new { @class = "text-light"})
-                        @Html.TextBoxFor(m => m.EndDate, "{0:s}", new { @class = "form-control form-select", @type = "datetime-local", required = true, @id = "endDateInput" })
-                    </div>
+                <div class="d-flex flex-column form-group gap-3">
+                    @Html.LabelFor(m => m.StartDate, "Välja ett datum och tidpunkt när enkäten ska börja", new { @class = "text-light"})
+                    <input type="datetime-local" id="startDateInput" name="StartDate" class="form-control" value="@if(Model.StartDate != DateTime.Parse("0001-01-01 00:00")) { @Model.StartDate; }" required />
+                </div>
 
+                <div class="d-flex flex-column form-group gap-3">
+                    @Html.LabelFor(m => m.EndDate, "Välja ett datum och tidpunkt när enkäten ska avslutas", new { @class = "text-light"})
+                    <input type="datetime-local" id="endDateInput" name="StartDate" class="form-control" value="@if(Model.StartDate != DateTime.Parse("0001-01-01 00:00")) {@Model.EndDate; }" required />
                 </div>
             </div>
 
@@ -47,7 +45,7 @@
             </div>
 
             <div class="form-group my-5">
-                <button type="button" class="btn btn-primary add-question">Lägg till fråga</button>
+                <button type="button" class="btn add-image-button add-question text-light" title="Lägg till ny fråga"></button>
             </div>
 
             <div class="form-group my-5">

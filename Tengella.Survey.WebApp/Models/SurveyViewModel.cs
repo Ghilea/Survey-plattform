@@ -1,4 +1,6 @@
-﻿using Tengella.Survey.Data.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
+using Tengella.Survey.Data.Models;
 
 namespace Tengella.Survey.Web.Models
 {

@@ -1,9 +1,10 @@
 $(document).ready(function () {
     let questionIndex = 0;
 
-    function addRemoveButton(event, optionsContainer = null) {
-        const removeButton = $("<button>Ta bort</button>").attr({
-            class: "btn btn-danger remove-button",
+    function addRemoveButton(event, optionsContainer = null, path = null) {
+        const removeButton = $("<button></button>").attr({
+            class: "btn delete-image-button",
+            title: "Ta bort",
             type: "button"
         });
 
@@ -18,9 +19,12 @@ $(document).ready(function () {
            
         });
 
-        event.append(removeButton);
-
-        // Add a class to the remove button for easy selection later
+        if (path) {
+            path.append(removeButton)
+        } else {
+            event.append(removeButton);
+        }
+        
         removeButton.addClass('remove-button');
     }
 
@@ -60,7 +64,6 @@ $(document).ready(function () {
             addOptionToContainer(optionsContainer, questionContainer, optionId, name);
         }
 
-        // Enable the "Ta bort" buttons for all options
         optionsContainer.find('.remove-button').prop('disabled', false);
     }
 
@@ -77,7 +80,6 @@ $(document).ready(function () {
         const optionNumber = optionCount + 1;
         const inputName = `Questions[${questionContainer.attr('question-index')}].Options[${optionNumber}]`;
 
-        // Hidden field for option Id
         $("<input />").attr({ type: 'hidden', name: `Id.Question[${questionContainer.attr('question-index')}].Option[${optionNumber}]`, value: optionId }).appendTo(itemContainer);
 
         const optionInput = $(`<input type="text" name="${inputName}" value="Alternativ ${optionNumber}">`);
@@ -97,9 +99,11 @@ $(document).ready(function () {
         const questionContainer = $(event.currentTarget === undefined ? event : event.currentTarget).closest('.question-container');
 
         if (questionContainer.find('.additional-info').length === 0) {
-            const addAdditionInfo = $("<div></div>").attr({ class: "form-group additional-info" });
+            const addAdditionInfo = $("<div></div>").attr({ class: "d-flex flex-column gap-3 form-group additional-info text-light" });
 
             $("<label></label>").append('Information').appendTo(addAdditionInfo);
+
+            const containerField = $("<div class='d-flex text-2xl flex flex-row gap-3'></div>").appendTo(addAdditionInfo);
 
             const textAreaInput = $("<textarea></textarea>").attr({
                 class: "form-control",
@@ -109,52 +113,45 @@ $(document).ready(function () {
 
             if (name !== "") { textAreaInput.val(name) }
 
-            textAreaInput.appendTo(addAdditionInfo);
+            textAreaInput.appendTo(containerField);
 
             questionContainer.append(addAdditionInfo);
 
-            addRemoveButton(addAdditionInfo);
+            addRemoveButton(addAdditionInfo, null, containerField);
         }
     }
 
     function addNewQuestion(questionId, name = "") {
-        const questionContainer = $("<div></div>").attr("class", 'd-flex flex-column gap-3 question-container').attr('question-index', questionIndex).appendTo('#questionsContainer');
+        const questionContainer = $("<div></div>").attr("class", 'd-flex flex-column gap-3 question-container bg-gradient rounded px-3 my-3').attr('question-index', questionIndex).appendTo('#questionsContainer');
         $("<input />").attr({ type: 'hidden', name: `Id.Question[${questionIndex}]`, value: questionId }).appendTo(questionContainer);
 
-        const container = $("<div class='text-2xl flex flex-row gap-x-5'></div>");
-        $(`<label for=question-${questionIndex} class="text-light mt-3"></label>`).append(`#${questionIndex}`).appendTo(container);
-        $("<input />").attr({ id: `question-${questionIndex}`, class: 'form-control question', name: `question-${questionIndex}`, placeholder: 'Skriv...', type: 'text', value: name }).appendTo(container);
+        const container = $("<div class='text-2xl flex flex-row gap-2'></div>");
+        $(`<label for=question-${questionIndex} class="text-light mt-3 mb-2"></label>`).append(`#${questionIndex}`).appendTo(container);
 
-        const questionButtons = $("<div></div>").attr("class", "d-flex gap-1 form-group question-buttons")
-        $("<button>Alternativ</button>").attr({ id: `question-${questionIndex}-addOptions`, class: "btn btn-primary add-option", type: "button" }).appendTo(questionButtons);
-        $("<button>Information</button>").attr({ id: `additionalInfo-question-${questionIndex}`, class: "btn btn-primary add-additional-info", type: "button" }).appendTo(questionButtons);
+        const containerField = $("<div class='d-flex text-2xl flex flex-row gap-3'></div>").appendTo(container);
+        $("<input />").attr({ id: `question-${questionIndex}`, class: 'form-control question', name: `question-${questionIndex}`, placeholder: 'Skriv...', type: 'text', value: name }).appendTo(containerField);
+
+        const questionButtons = $("<div></div>").attr({ class: "d-flex gap-3 form-group question-buttons bg-gradient p-2 rounded"})
+        $("<button></button>").attr({ id: `question-${questionIndex}-addOptions`, class: "btn shape-image-button add-option", type: "button", title: "Lägg till flervalsfråga" }).appendTo(questionButtons);
+        $("<button></button>").attr({ id: `additionalInfo-question-${questionIndex}`, class: "btn information-image-button add-additional-info", type: "button", title: "Lägg till informationsruta" }).appendTo(questionButtons);
 
         questionContainer.append(container, questionButtons);
 
-        addRemoveButton(questionContainer);
+        addRemoveButton(questionContainer, null, containerField)
 
         questionIndex++;
     }
 
-    // Get references to the StartDate and EndDate input elements
     const startDateInput = $('#startDateInput');
     const endDateInput = $('#endDateInput');
 
-    // Update the min attribute of the EndDate input when StartDate changes
     startDateInput.on('change', function () {
-        // Parse the selected start date
         const selectedStartDate = new Date($(this).val());
 
-        // Calculate the minimum end date as the start date + 1 month
         const minEndDate = new Date(selectedStartDate.getFullYear(), selectedStartDate.getMonth() + 1, 1);
-
-        // Format the minimum end date as "yyyy-MM"
         const formattedMinEndDate = minEndDate.toISOString().slice(0, 7);
-
-        // Set the minimum attribute for the EndDate input
         endDateInput.attr('min', formattedMinEndDate);
 
-        // If the selected end date is less than the minimum end date, reset the EndDate value
         if (new Date(endDateInput.val()) < minEndDate) {
             endDateInput.val(formattedMinEndDate);
         }
@@ -164,11 +161,9 @@ $(document).ready(function () {
         const optionsContainer = $(this).closest('.options');
         const itemContainers = optionsContainer.find('.itemContainer');
 
-        // Check if there are more than 2 options left
         if (itemContainers.length > 2) {
-            $(this).closest('.itemContainer').remove(); // Remove the option
+            $(this).closest('.itemContainer').remove();
         } else {
-            // Disable the remove buttons for all options if there are 2 or fewer options
             itemContainers.find('.remove-button').prop('disabled', true);
         }
     });

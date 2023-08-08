@@ -36,7 +36,7 @@ namespace Tengella.Survey.WebApp.Controllers
             return View(survey);
         }
 
-        public IActionResult Create(SurveyViewModel preview)
+        public IActionResult Create()
         {
             var SurveyTypes = _surveyDbcontext.SurveyTypes.ToList();
             var surveyModel = new SurveyViewModel();
@@ -45,7 +45,7 @@ namespace Tengella.Survey.WebApp.Controllers
             {
                 surveyModel = JsonConvert.DeserializeObject<SurveyViewModel>(surveyJson);
                 surveyModel.ListOfType = SurveyTypes;
-                return View(surveyModel);
+                return View("Create", surveyModel);
             }
 
             surveyModel.ListOfType = SurveyTypes;
@@ -79,7 +79,7 @@ namespace Tengella.Survey.WebApp.Controllers
             if (!string.IsNullOrEmpty(fromPreview))
             {
                 TempData["TempDataForCreateSurvey"] = JsonConvert.SerializeObject(survey);
-                return RedirectToAction("Create", survey);
+                return RedirectToAction("Create");
             }
 
             _SurveyRepository.AddSurvey(survey);

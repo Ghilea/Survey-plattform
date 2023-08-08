@@ -59,7 +59,7 @@ input[type="checkbox"] {
     position: relative;
 }
 
-.delete-image-button, .add-image-button, .statistic-image-button, .edit-image-button, .copy-image-button, .send-image-button {
+.delete-image-button, .add-image-button, .statistic-image-button, .edit-image-button, .copy-image-button, .send-image-button, .shape-image-button, .information-image-button {
     display: inline-block;
     background: transparent;
     border: none;
@@ -89,4 +89,12 @@ input[type="checkbox"] {
 
     .send-image-button::before {
         content: url("/icons/envelope_email_icon.svg");
+    }
+
+    .shape-image-button::before {
+        content: url("/icons/shapes_icon.svg");
+    }
+
+    .information-image-button::before {
+        content: url("/icons/information_icon.svg");
     }

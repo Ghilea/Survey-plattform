@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Tengella.Survey.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,8 +51,7 @@ namespace Tengella.Survey.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StatisticId = table.Column<int>(type: "int", nullable: false),
-                    TemplateId = table.Column<int>(type: "int", nullable: false)
+                    StatisticId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -279,17 +278,11 @@ namespace Tengella.Survey.Data.Migrations
                     Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SurveyListsId = table.Column<int>(type: "int", nullable: true),
-                    StatisticId = table.Column<int>(type: "int", nullable: true),
-                    StatisticQuestionId = table.Column<int>(type: "int", nullable: true)
+                    StatisticId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Templates", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Templates_StatisticsQuestions_StatisticQuestionId",
-                        column: x => x.StatisticQuestionId,
-                        principalTable: "StatisticsQuestions",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Templates_Statistics_StatisticId",
                         column: x => x.StatisticId,
@@ -400,11 +393,6 @@ namespace Tengella.Survey.Data.Migrations
                 column: "StatisticId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Templates_StatisticQuestionId",
-                table: "Templates",
-                column: "StatisticQuestionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Templates_SurveyListsId",
                 table: "Templates",
                 column: "SurveyListsId");
@@ -440,6 +428,9 @@ namespace Tengella.Survey.Data.Migrations
                 name: "DistributionTypes");
 
             migrationBuilder.DropTable(
+                name: "StatisticsQuestions");
+
+            migrationBuilder.DropTable(
                 name: "SurveyOptions");
 
             migrationBuilder.DropTable(
@@ -450,9 +441,6 @@ namespace Tengella.Survey.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Templates");
-
-            migrationBuilder.DropTable(
-                name: "StatisticsQuestions");
 
             migrationBuilder.DropTable(
                 name: "Statistics");

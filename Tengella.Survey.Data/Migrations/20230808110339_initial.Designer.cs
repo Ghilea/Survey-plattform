@@ -12,8 +12,8 @@ using Tengella.Survey.Data;
 namespace Tengella.Survey.Data.Migrations
 {
     [DbContext(typeof(SurveyDbContext))]
-    [Migration("20230806131246_initial6")]
-    partial class initial6
+    [Migration("20230808110339_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
