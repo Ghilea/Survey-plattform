@@ -19,7 +19,7 @@
     <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
         @if (Model.EndDate < DateTime.Now)
         {
-            <div style="color: red;">Enkäten har passerat slutdatumet.</div>
+            <h2 class="text-danger text-center h2">Enkäten är avslutat.</h2>
         }
 
         @using (Html.BeginForm("SendSurvey", "Survey", new { emailAddress = ViewBag.EmailAddress }))
@@ -28,35 +28,40 @@
 
                     @for (int i = 0; i < Model.Questions.Count; i++)
                     {
-                        <div class="question-container d-flex flex-column gap-3 mb-4 bg-gradient bg-light rounded p-3" question-index="@i">
-                            <h2 class="fs-5">
-                            @Html.Hidden($"Name-{Model.Questions[i].Id}", @Model.Questions[i].Name)
-                                @Model.Questions[i].Name
-                            </h2>
+                        <div class="text-light question-container d-flex flex-column gap-3 mb-5 pb-5" question-index="@i">
+                            <hr class="hr-light">
+                            <h3 class="fs-5 text-center">
+                                @Html.Hidden($"Name-{Model.Questions[i].Id}", @Model.Questions[i].Name)
+                                    @Model.Questions[i].Name
+                                </h3>
+                            <hr class="hr-light">
 
-                        @if (Model.Questions[i].Options.Count == 0)
-                        {
-                            <div class="optionQuestion">
-                                @Html.TextArea("Question-"+Model.Questions[i].Id, "", 5, 30, new { @class = "form-control", title = "Skriv ditt svar här" })
+                            <div class="d-flex flex-row align-items-center gap-4">
+
+                            @if (Model.Questions[i].Options.Count == 0)
+                            {
+                                <div class="optionQuestion bg-gradient rounded py-5 px-3 w-100">
+                                    @Html.TextArea("Question-"+Model.Questions[i].Id, "", 5, 30, new { @class = "form-control", title = "Skriv ditt svar här" })
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="options d-flex flex-row gap-3 bg-gradient rounded py-5 px-3 w-100">
+                                    @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
+                                    {
+                                        var optionId = $"Question-{Model.Questions[i].Id}-Option-{j}";
+                                        var optionValue = Model.Questions[i].Options[j].Name;
+                                        var optionName = $"Question-{Model.Questions[i].Id}";
+
+                                        <div class="d-flex gap-3 itemContainer">
+                                            @Html.Label(optionId, Model.Questions[i].Options[j].Name)
+                                            @Html.RadioButton(optionName, optionValue, new { id = optionId, @class = "form-check-input" })
+                                        </div>
+                                    }
+                                </div>                
+                            }
                             </div>
-                        }
-                        else
-                        {
-                             <div class="options d-flex flex-row gap-3">
-                                @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
-                                {
-                                    var optionId = $"Question-{Model.Questions[i].Id}-Option-{j}";
-                                    var optionValue = Model.Questions[i].Options[j].Name;
-                                    var optionName = $"Question-{Model.Questions[i].Id}";
-
-                                    <div class="d-flex gap-3 itemContainer">
-                                        @Html.Label(optionId, Model.Questions[i].Options[j].Name)
-                                        @Html.RadioButton(optionName, optionValue, new { id = optionId, @class = "form-check-input" })
-                                    </div>
-                                }
-                            </div>                
-                        }
-                    </div>
+                        </div>
                     }
             </div>
 

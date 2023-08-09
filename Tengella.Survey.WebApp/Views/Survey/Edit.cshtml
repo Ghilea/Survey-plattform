@@ -36,7 +36,7 @@
 
                 <div class="d-flex flex-column form-group gap-3">
                     @Html.LabelFor(m => m.EndDate, "Välja ett datum och tidpunkt när enkäten ska avslutas", new { @class = "text-light"})
-                    <input type="datetime-local" id="endDateInput" name="StartDate" class="form-control" value="@if(Model.StartDate != DateTime.Parse("0001-01-01 00:00")) {@Model.EndDate; }" required />
+                    <input type="datetime-local" id="endDateInput" name="EndDate" class="form-control" value="@if(Model.StartDate != DateTime.Parse("0001-01-01 00:00")) {@Model.EndDate; }" required />
                 </div>
             </div>
 
