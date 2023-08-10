@@ -13,17 +13,31 @@
         </h2>
     </div>
 
-    <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
+    <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow text-light">
     
-        <div class="d-flex flex-column gap-3">
-            <h2 class="fs-5">E-postadress</h2>
-            <p>@Model.Email</p>
+        <div class="d-flex flex-row gap-3">
+            <div class="bg-gradient rounded col-2 d-flex align-items-center justify-content-center">
+                <img src="/icons/id_card_icon.svg" />
+            </div>
+            
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex flex-column">
+                    <h2 class="fs-5">E-postadress:</h2>
+                    <p>@Model.Email</p>
+                </div>
+
+                @if (@Model.OrganizationNumber != null)
+                {
+                     <div class="d-flex flex-column">
+                    <h2 class="fs-5">Organisationsnummer:</h2>
+                    <p class="fs-5">@Model.OrganizationNumber</p>
+                </div>
+                }
+               
+            </div>
         </div>
 
-        <div class="d-flex flex-column gap-3">
-            <h2 class="fs-5">Organisationsnummer</h2>
-            <p class="fs-5">@Model.OrganizationNumber</p>
-        </div>
+        
     
     </div>
 </div>

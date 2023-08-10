@@ -8,6 +8,7 @@ namespace Tengella.Survey.WebApp.Repositories
         IEnumerable<Distribution> GetAllEmailAddresses();
         DistributionViewModel GetEmailAddressByAddress(string address);
         DistributionViewModel GetEmailAddressById(int id);
+        List<DistributionViewModel> MapToViewModels(List<DistributionType> type, IEnumerable<Distribution> list);
         void AddEmailAddress(Distribution emailAddress);
         void UpdateEmailAddress(DistributionViewModel emailAddress);
         void DeleteEmailAddress(int id);

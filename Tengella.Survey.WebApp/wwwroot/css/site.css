@@ -92,7 +92,7 @@ input[type="checkbox"] {
     }
 
     .shape-image-button::before {
-        content: url("/icons/shapes_icon.svg");
+        content: url("/icons/square_plus_icon.svg");
     }
 
     .information-image-button::before {

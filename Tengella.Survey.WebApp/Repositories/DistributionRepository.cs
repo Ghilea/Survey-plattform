@@ -50,6 +50,36 @@ namespace Tengella.Survey.WebApp.Repositories
             return viewModel;
         }
 
+        public List<DistributionViewModel> MapToViewModels(List<DistributionType> type, IEnumerable<Distribution> list)
+        {
+
+            var distributionViewModels = new List<DistributionViewModel>();
+
+            foreach (var distribution in list)
+            {
+                var typeName = "Okänd";
+                var selectedType = type.FirstOrDefault(st => st.Id == distribution.DistributionTypeId);
+                if (selectedType != null)
+                {
+                    typeName = selectedType.Name;
+                }
+
+                var distributionViewModel = new DistributionViewModel
+                {
+                    Name = distribution.Name,
+                    DistributionTypeId = distribution.DistributionTypeId,
+                    Email = distribution.Email,
+                    ListOfType = type,
+                    TypeName = typeName,
+                    Id = distribution.Id
+                };
+
+                distributionViewModels.Add(distributionViewModel);
+            }
+
+            return distributionViewModels;
+        }
+
         public DistributionViewModel GetEmailAddressById(int id)
         {
             var emailAddress = _surveyDbcontext.Distribution.FirstOrDefault(e => e.Id == id);

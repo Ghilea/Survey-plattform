@@ -1,12 +1,11 @@
-﻿using MailKit.Security;
-using Microsoft.AspNetCore.Mvc;
-using MimeKit;
-using MimeKit.Text;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
+using System.Threading.Tasks;
 using Tengella.Survey.Data.Models;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Tengella.Survey.Data;
 using Tengella.Survey.Web.Models;
-using OfficeOpenXml;
+using Tengella.Survey.WebApp.Repositories;
 
 namespace Tengella.Survey.WebApp.Repositories
 {
@@ -31,31 +30,7 @@ namespace Tengella.Survey.WebApp.Repositories
         {
             var listOfType = _surveyDbcontext.DistributionTypes.ToList();
             var distributions = _DistributionRepository.GetAllEmailAddresses();
-
-            var distributionViewModels = new List<DistributionViewModel>();
-
-            foreach (var distribution in distributions)
-            {
-                var typeName = "Okänd";
-                var selectedType = listOfType.FirstOrDefault(st => st.Id == distribution.DistributionTypeId);
-                if (selectedType != null)
-                {
-                    typeName = selectedType.Name;
-                }
-
-                var distributionViewModel = new DistributionViewModel
-                {
-                    Name = distribution.Name,
-                    DistributionTypeId = distribution.DistributionTypeId,
-                    Email = distribution.Email,
-                    ListOfType = listOfType,
-                    TypeName = typeName,
-                    Id = distribution.Id
-                };
-
-                distributionViewModels.Add(distributionViewModel);
-            }
-
+            var distributionViewModels = _DistributionRepository.MapToViewModels(listOfType, distributions);
             return View(distributionViewModels);
         }
 
