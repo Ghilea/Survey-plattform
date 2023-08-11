@@ -285,6 +285,25 @@ namespace Tengella.Survey.WebApp.Repositories
 
         public void DeleteSurveyById(int id)
         {
+            var statistic = _surveyDbcontext.Statistics.Where(q => q.SurveyListId == id).ToList();
+            
+            if (statistic != null)
+            {
+                foreach (var statisticQuestion in statistic)
+                {
+                    var stats = _surveyDbcontext.StatisticsQuestions.Where(x => x.StatisticId == statisticQuestion.Id);
+                    
+                    if (stats != null)
+                    {
+                        _surveyDbcontext.StatisticsQuestions.RemoveRange(stats);
+                        _surveyDbcontext.SaveChanges();
+                    }
+                }
+
+                _surveyDbcontext.Statistics.RemoveRange(statistic);
+                _surveyDbcontext.SaveChanges();
+            }
+
             var survey = _surveyDbcontext.SurveyList.Include(s => s.Questions).ThenInclude(o => o.Options).FirstOrDefault(s => s.Id == id);
 
             if (survey != null)
@@ -292,8 +311,12 @@ namespace Tengella.Survey.WebApp.Repositories
                 foreach (var question in survey.Questions)
                 {
                     var surveyOptions = _surveyDbcontext.SurveyOptions.Where(option => option.SurveyQuestionId == question.Id);
-                    _surveyDbcontext.SurveyOptions.RemoveRange(surveyOptions);
-                    _surveyDbcontext.SaveChanges();
+
+                    if (surveyOptions != null)
+                    {
+                        _surveyDbcontext.SurveyOptions.RemoveRange(surveyOptions);
+                        _surveyDbcontext.SaveChanges();
+                    }
                 }
 
                 _surveyDbcontext.SurveyQuestions.RemoveRange(survey.Questions);

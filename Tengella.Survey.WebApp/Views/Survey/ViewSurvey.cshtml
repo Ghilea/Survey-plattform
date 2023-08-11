@@ -31,6 +31,14 @@
                             <h3 class="fs-5 text-center">
                                 @Model.Questions[i].Name
                             </h3>
+
+                        @if (!string.IsNullOrEmpty(@Model.Questions[i].AdditionalInfo))
+                        {
+                            <small class="additionInfo">
+                                @Model.Questions[i].AdditionalInfo
+                            </small>
+                        }
+                   
                         <hr class="hr-light">
                         
                         <div class="d-flex flex-row align-items-center gap-4">
@@ -38,7 +46,7 @@
                         @if (Model.Questions[i].Options.Count == 0)
                             {
                                 <div class="optionQuestion bg-gradient rounded py-5 px-3 w-100">
-                                    @Html.TextArea("Question-"+Model.Questions[i].Id, "", 5, 30, new { @class = "form-control", title = "Skriv ditt svar här" })
+                                    @Html.TextArea("Question-"+Model.Questions[i].Id, "", 5, 30, new { @class = "form-control", title = "Skriv ditt svar här", placeholder = "Skriv ditt svar här" })
                                 </div>
                             }
                             else

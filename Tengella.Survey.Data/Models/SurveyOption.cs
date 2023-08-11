@@ -9,6 +9,7 @@
 
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public bool IsLimit { get; set; } = false;
         public int SurveyQuestionId { get; set; } // Foreign key to CreatedSurvey
 
         public ICollection<SurveyQuestion> SurveyQuestions { get; set; } // Navigation property to the associated CreatedSurvey

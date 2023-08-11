@@ -1,6 +1,6 @@
 $(document).ready(function () {
     let questionIndex = 0;
-
+    const sliderCounts = {};
     function addRemoveButton(event, optionsContainer = null, path = null) {
         const removeButton = $("<button></button>")
             .attr({
@@ -16,6 +16,10 @@ $(document).ready(function () {
                 const itemContainers = optionsContainer
                     .find('.itemContainer');
 
+                const questionCount = $(this).parent().find('input[type="hidden"]').attr('question-index');
+
+                sliderCounts[questionCount] = itemContainers.length;
+
                 if (itemContainers.length <= 2) {
                     itemContainers
                         .find('.remove-button')
@@ -27,7 +31,7 @@ $(document).ready(function () {
 
         if (path) {
             path.append(removeButton)
-        } else {
+        } else {    
             event.append(removeButton);
         }
         
@@ -39,7 +43,6 @@ $(document).ready(function () {
 
         if (question.options.length > 0) {
             $.each(question.options, function (indexOption, option) {
-                console.log(option)
                 const getAddOptionButton = $(`#question-${index}-addOptions`);
                 addNewOption(getAddOptionButton, option.id, option.name)
             });
@@ -47,7 +50,6 @@ $(document).ready(function () {
 
         if (question.additionalInfo) {
             const getAddAdditionButton = $(`#additionalInfo-question-${index}`);
-            console.log(getAddAdditionButton)
             addNewAdditionalInfo(getAddAdditionButton, question.additionalInfo)
         }
         
@@ -60,13 +62,40 @@ $(document).ready(function () {
         let optionsContainer = questionContainer
             .find('.options');
 
+        const sliderContainer = $("<div></div>")
+            .attr({
+                class: "sliderContainer"
+            });
+
+        const sliderCount = sliderCounts[questionIndex];
+
+        const sliderLabel = $("<label>Gr&auml;nsv&auml;rde</label>")
+            .attr({
+                class: "text-white",
+                for: `question[${ questionIndex }]-limitSlider`
+            });
+
+        const sliderInput = $("<input>")
+            .attr({
+                type: "range",
+                min: 0,
+                max: sliderCount,
+                value: Math.floor(sliderCount / sliderCount),
+                class: "slider w-100",
+                id: `question[${questionIndex}]-limitSlider`,
+            })
+
+        const sliderOutput = $("<output></output>");
+
+        sliderContainer.append(sliderLabel, sliderInput, sliderOutput)
+
         if (optionsContainer.length === 0) {
             optionsContainer = $('<div></div>')
                 .attr({
                     class: 'd-flex flex-column gap-3 options'
                 });
 
-            questionContainer.append(optionsContainer);
+            questionContainer.append(sliderContainer, optionsContainer);
 
             addOptionToContainer(optionsContainer, questionContainer, optionId, name);
             if (event.currentTarget !== undefined) {
@@ -103,6 +132,7 @@ $(document).ready(function () {
             .attr({
                 type: 'hidden',
                 name: `Id.Question[${questionContainer.attr('question-index')}].Option[${optionNumber}]`,
+                "question-index": questionContainer.attr('question-index'),
                 value: optionId
             })
             .appendTo(itemContainer);
@@ -129,6 +159,14 @@ $(document).ready(function () {
         });
 
         itemContainer.append(optionInput);
+
+        const questionCount = questionContainer
+            .attr('question-index');
+
+        const itemCount = $(optionsContainer)
+            .find('.itemContainer');
+
+        sliderCounts[questionCount] = itemCount.length;
 
         addRemoveButton(itemContainer, optionsContainer);
     }
@@ -181,7 +219,7 @@ $(document).ready(function () {
             .attr({
                 type: 'hidden',
                 name: `Id.Question[${questionIndex}]`,
-                value: questionId
+                value: questionId,
             })
             .appendTo(questionContainer);
 
@@ -253,35 +291,6 @@ $(document).ready(function () {
         if (new Date(endDateInput.val()) < minEndDate) {
             endDateInput
                 .val(formattedMinEndDate);
-        }
-    });
-
-    $(document).on('click', '.remove-button', function () {
-        const optionsContainer = $(this)
-            .closest('.options');
-
-        const itemContainers = optionsContainer
-            .find('.itemContainer');
-
-        if (itemContainers.length > 2) {
-            $(this)
-                .closest('.itemContainer')
-                .remove();
-        } else {
-            itemContainers
-                .find('.remove-button')
-                .prop('disabled', true);
-        }
-    });
-
-    $('.options').each(function () {
-        const itemContainers = $(this)
-            .find('.itemContainer');
-
-        if (itemContainers.length <= 2) {
-            itemContainers
-                .find('.remove-button')
-                .prop('disabled', true);
         }
     });
 

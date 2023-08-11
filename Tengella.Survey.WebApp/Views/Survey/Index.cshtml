@@ -67,7 +67,7 @@
                         @if (survey.AmountRecivers > 0) {
                             @Html.ActionLink("", "Index", "Statistic", new {surveyId = survey.Id}, new { @class = "btn statistic-image-button", title = "Visa statistik" })
                         }
-                        @Html.ActionLink("", "Delete", new {id = survey.Id}, new { @class = "btn delete-image-button", title = "Ta bort", onclick = "return confirm('Är du säker på att du vill ta bort enkäten?');" })
+                        @Html.ActionLink("", "Delete", new {id = survey.Id}, new { @class = "btn delete-image-button", title = "Ta bort", onclick = "return confirm('Är du säker på att du vill ta bort enkäten? All statistik kommer tas bort!');" })
                     </div>
                 </div>
             }
