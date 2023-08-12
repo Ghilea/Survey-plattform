@@ -12,7 +12,7 @@ using Tengella.Survey.Data;
 namespace Tengella.Survey.Data.Migrations
 {
     [DbContext(typeof(SurveyDbContext))]
-    [Migration("20230808110339_initial")]
+    [Migration("20230812110234_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -282,6 +282,9 @@ namespace Tengella.Survey.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsLimit")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
