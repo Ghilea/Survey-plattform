@@ -102,7 +102,7 @@ $(document).ready(function () {
         const trendData = questions[chartIndex].trendData;
 
         const trendSortLabels = trendData.map(item => new Date(item.date).toLocaleString('default', { month: 'short', day: '2-digit', year: '2-digit' }));
-        const trendSortData = trendData.map(item => item.value);
+        const trendSortData = trendData.map(item => Math.round(item.value));
 
         if (trendSortData[0] > 0) {
             createTrendChart(chartIndex, trendSortLabels, trendSortData);

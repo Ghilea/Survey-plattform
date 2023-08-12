@@ -15,11 +15,11 @@ namespace Tengella.Survey.WebApp.Repositories
             _surveyDbcontext = surveyDbcontext;
         }
 
-        public int GetStatisticIdByEmailAddress(string emailaddress)
+        public int GetStatisticIdByEmailAddressAndSurveyId(int id, string emailaddress)
         {
             var distributionId = _surveyDbcontext.Distribution.FirstOrDefault(e => e.Email == emailaddress);
 
-            var statisticId = _surveyDbcontext.Statistics.FirstOrDefault(s => s.DistributionId == distributionId.Id);
+            var statisticId = _surveyDbcontext.Statistics.FirstOrDefault(s => s.DistributionId == distributionId.Id && s.SurveyListId == id);
             
             return statisticId.Id;                        
         }
@@ -63,6 +63,7 @@ namespace Tengella.Survey.WebApp.Repositories
         {
             var questionStatistics = new List<StatisticQuestionViewModel>();
             var questionList = new Dictionary<string, Dictionary<string, int>>();
+            int index = 0;
 
             var template = _surveyDbcontext.Templates.FirstOrDefault(s => s.SurveyId == surveyId);
 
@@ -100,6 +101,7 @@ namespace Tengella.Survey.WebApp.Repositories
             {
                 var addModel = new StatisticQuestionViewModel
                 {
+                    Id = index,
                     Name = entry.Key,
                     Answers = entry.Value,
                     AverageRating = GetAverageRating(entry.Value),
@@ -107,6 +109,8 @@ namespace Tengella.Survey.WebApp.Repositories
                 };
 
                 questionStatistics.Add(addModel);
+
+                index++;
             }
 
             return questionStatistics;

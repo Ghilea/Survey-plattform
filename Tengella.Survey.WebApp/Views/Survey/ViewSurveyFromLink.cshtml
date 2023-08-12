@@ -22,7 +22,7 @@
             <h2 class="text-danger text-center h2">Enkäten är avslutat.</h2>
         }
 
-        @using (Html.BeginForm("SendSurvey", "Survey", new { emailAddress = ViewBag.EmailAddress }))
+        @using (Html.BeginForm("SendSurvey", "Survey", new { id = Model.Id, emailAddress = ViewBag.EmailAddress }))
         {
             <div id="questionsContainer">
 

@@ -116,9 +116,9 @@ namespace Tengella.Survey.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult SendSurvey(IFormCollection form, string emailAddress)
+        public IActionResult SendSurvey(IFormCollection form, int id, string emailAddress)
         {
-            int statisticId = _StatisticRepository.GetStatisticIdByEmailAddress(emailAddress);
+            int statisticId = _StatisticRepository.GetStatisticIdByEmailAddressAndSurveyId(id, emailAddress);
 
             var questionKeys = form.Keys.Where(key => key.StartsWith("Question-")).ToList();
 
@@ -132,10 +132,17 @@ namespace Tengella.Survey.WebApp.Controllers
                 {
                     Name = questionName,
                     Answer = form[key],
-                    StatisticId = statisticId,
+                    StatisticId = statisticId
                 };
 
                 _surveyDbcontext.StatisticsQuestions.Add(statisticQuestion);
+            }
+
+            var updateStatistic = _surveyDbcontext.Statistics.FirstOrDefault(x => x.Id == statisticId);
+
+            if(updateStatistic != null)
+            {
+                updateStatistic.IsDone = true;
             }
 
             _surveyDbcontext.SaveChanges();

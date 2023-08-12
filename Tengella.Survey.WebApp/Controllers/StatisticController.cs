@@ -38,6 +38,7 @@ namespace Tengella.Survey.WebApp.Controllers
 
             var model = new StatisticViewModel
             {
+                Id = surveyId,
                 AmountRecivers = amountRecivers,
                 AmountRetrivers = amountRetrivers,
                 Questions = statisticQuestions,

@@ -51,7 +51,6 @@
             
             @foreach (var questionStat in Model.Questions)
             {
-               
                 <div class="my-5">
                     <h3 class="h5 text-center text-light">@questionStat.Name</h3>
                 </div>
@@ -68,7 +67,7 @@
                         <h4 class="text-light">Trend</h4>
                         <div class="d-flex flex-row flex-wrap justify-content-start align-items-center py-3">
                             <small class="text-light">
-                                Medelvärdet för denna fråga ligger på <strong>@(commonValue)</strong>.
+                                Medelvärdet för denna fråga ligger på <strong>@(commonValue.HasValue ? Math.Floor(commonValue.Value) : 0)</strong>.
                             </small>
                         </div>
 

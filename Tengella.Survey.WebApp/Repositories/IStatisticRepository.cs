@@ -13,6 +13,6 @@ namespace Tengella.Survey.WebApp.Repositories
         void AddStatistic(Statistic template);
         void UpdateStatistic(Statistic template);
         void DeleteStatistic(int id);
-        int GetStatisticIdByEmailAddress(string emailaddress);
+        int GetStatisticIdByEmailAddressAndSurveyId(int id, string emailaddress);
     }
 }

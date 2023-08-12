@@ -202,6 +202,7 @@ namespace Tengella.Survey.WebApp.Repositories
                     TemplateId = template.Id,
                     DateAdded = DateTime.Now,
                     DateUpdated = DateTime.Now,
+                    IsDone = false,
                 };
 
                 _StatisticRepository.AddStatistic(statistic);

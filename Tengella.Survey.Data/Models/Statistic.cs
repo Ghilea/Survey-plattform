@@ -15,6 +15,7 @@
         public int TemplateId { get; set; }
         public DateTime DateAdded { get; set; }
         public DateTime DateUpdated { get; set; }
+        public bool IsDone { get; set; } = false;
         public List<StatisticQuestion> Questions { get; set; } = new List<StatisticQuestion>();
 
         public ICollection<Template> Templates { get; set; } // Navigation property
