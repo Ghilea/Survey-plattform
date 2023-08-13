@@ -143,6 +143,7 @@ namespace Tengella.Survey.WebApp.Controllers
             if(updateStatistic != null)
             {
                 updateStatistic.IsDone = true;
+                updateStatistic.DateUpdated = DateTime.Now;
             }
 
             _surveyDbcontext.SaveChanges();

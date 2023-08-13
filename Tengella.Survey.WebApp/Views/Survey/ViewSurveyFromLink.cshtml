@@ -16,7 +16,7 @@
         </h2>
     </div>
 
-    <div class="col-6 my-3 p-5 bg-gradient rounded box-shadow">
+    <div class="col-12 col-xl-8 my-3 p-5 bg-gradient rounded box-shadow">
         @if (Model.EndDate < DateTime.Now)
         {
             <h2 class="text-danger text-center h2">Enkäten är avslutat.</h2>
@@ -70,5 +70,9 @@
                 <button type="submit" class="btn btn-primary">Skicka</button>
             }
         }
+    </div>
 </div>
-</div>
+
+@section Scripts {
+    <script type="text/javascript" defer src="~/js/automaticSurveySave.js"></script>
+}

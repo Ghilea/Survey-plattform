@@ -39,7 +39,7 @@ namespace Tengella.Survey.WebApp.Repositories
                 question => question.StatisticId,
                 statistic => statistic.Id,
                 (question, statistic) => new { Question = question, Statistic = statistic })
-            .Where(x => x.Statistic.SurveyListId == surveyId)
+            .Where(x => x.Statistic.SurveyListId == surveyId && x.Statistic.IsDone == true)
             .Select(x => x.Question.StatisticId)
             .Distinct()
             .Count();
@@ -117,6 +117,16 @@ namespace Tengella.Survey.WebApp.Repositories
 
         }
 
+        public bool DoesQuestionAnswerNameExist(int id, string name)
+        {
+            var statisticQuestions = _surveyDbcontext.StatisticsQuestions
+        .FirstOrDefault(question => question.StatisticId == id && question.Name == name);
+
+            bool exists = statisticQuestions != null;
+
+            return exists;
+        }
+
         static double GetAverageRating(Dictionary<string, int> answers)
         {
             var totalSum = 0;
@@ -142,7 +152,7 @@ namespace Tengella.Survey.WebApp.Repositories
                       question => question.StatisticId,
                       statistic => statistic.Id,
                       (question, statistic) => new { Question = question, Statistic = statistic })
-                .GroupBy(x => x.Statistic.DateUpdated.Date) // Group by the date part of DateUpdated
+                .GroupBy(x => x.Statistic.DateUpdated.Date)
                 .Select(group => new
                 {
                     Date = group.Key,
