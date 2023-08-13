@@ -15,5 +15,6 @@ namespace Tengella.Survey.WebApp.Repositories
         void UpdateStatistic(Statistic template);
         void DeleteStatistic(int id);
         int GetStatisticIdByEmailAddressAndSurveyId(int id, string emailaddress);
+        List<StatisticQuestion> GetStatisticQuestionByEmailAddressAndSurveyId(int id, string emailaddress);
     }
 }

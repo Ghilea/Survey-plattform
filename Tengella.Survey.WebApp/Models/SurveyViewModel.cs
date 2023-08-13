@@ -17,6 +17,7 @@ namespace Tengella.Survey.Web.Models
         public ICollection<Statistic> Statistics { get; set; } = new List<Statistic>();
         public int AmountRecivers { get; set; }
         public int AmountRetrivers { get; set; }
+        public bool IsDone { get; set; }
     }
 
     public class QuestionViewModel

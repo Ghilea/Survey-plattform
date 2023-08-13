@@ -100,7 +100,30 @@ namespace Tengella.Survey.WebApp.Controllers
                 return NotFound();
             }
 
-            return View(survey);
+            var statistic = _StatisticRepository.GetStatisticById(id);
+            var statisticQuestion = _StatisticRepository.GetStatisticQuestionByEmailAddressAndSurveyId(id, emailAddress);
+
+            int index = 1;
+
+            ViewBag.QuestionAnswers = statisticQuestion.ToDictionary(q => $"Question-{index++}", q => q.Answer);
+
+            var surveyModel = new SurveyViewModel
+            {
+                Name = survey.Name,
+                Questions = survey.Questions,
+                StartDate = survey.StartDate,
+                Statistics = survey.Statistics,
+                TypeName = survey.TypeName,
+                Id = id,
+                ListOfType = survey.ListOfType,
+                SurveyTypeId = survey.SurveyTypeId,
+                EndDate = survey.EndDate,
+                AmountRetrivers = survey.AmountRetrivers,
+                AmountRecivers = survey.AmountRecivers,
+                IsDone = statistic.IsDone
+            };
+
+            return View(surveyModel);
         }
 
         public IActionResult ViewSurvey(int id)

@@ -24,6 +24,17 @@ namespace Tengella.Survey.WebApp.Repositories
             return statisticId.Id;                        
         }
 
+        public List<StatisticQuestion> GetStatisticQuestionByEmailAddressAndSurveyId(int id, string emailaddress)
+        {
+            var distributionId = _surveyDbcontext.Distribution.FirstOrDefault(e => e.Email == emailaddress);
+
+            var statistic = _surveyDbcontext.Statistics.FirstOrDefault(s => s.DistributionId == distributionId.Id && s.SurveyListId == id);
+
+            var questions = _surveyDbcontext.StatisticsQuestions.Where(x => x.StatisticId == statistic.Id).ToList();
+
+            return questions;
+        }
+
         public int AmountReciversBySurveyId(int surveyId)
         {
             var statistics = _surveyDbcontext.Statistics.Count(s => s.SurveyListId == surveyId);

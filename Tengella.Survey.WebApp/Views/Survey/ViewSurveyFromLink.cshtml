@@ -14,13 +14,18 @@
         <h2 class="mb-4 h6">
             Enkäten avslutas den @Model.EndDate.ToString("dd MMM yyyy") (@daysLeft dagar kvar)
         </h2>
-    </div>
-
-    <div class="col-12 col-xl-8 my-3 p-5 bg-gradient rounded box-shadow">
         @if (Model.EndDate < DateTime.Now)
         {
             <h2 class="text-danger text-center h2">Enkäten är avslutat.</h2>
         }
+
+        @if (Model.IsDone == true)
+        {
+            <small class="text-danger text-center w-100">Du har redan skickat in denna enkät!</small>
+        }
+    </div>
+
+    <div class="col-12 col-xl-8 my-3 p-5 bg-gradient rounded box-shadow">
 
         @using (Html.BeginForm("SendSurvey", "Survey", new { id = Model.Id, emailAddress = ViewBag.EmailAddress }))
         {
@@ -40,22 +45,35 @@
 
                             @if (Model.Questions[i].Options.Count == 0)
                             {
+                                var key = $"Question-{Model.Questions[i].Id}";
+
+                                var preFilledValue = ViewBag.QuestionAnswers.ContainsKey(key)
+                                ? ViewBag.QuestionAnswers[key]
+                                : "";
+
                                 <div class="optionQuestion bg-gradient rounded py-5 px-3 w-100">
-                                    @Html.TextArea("Question-"+Model.Questions[i].Id, "", 5, 30, new { @class = "form-control", title = "Skriv ditt svar här" })
+                                    @Html.TextArea("Question-"+Model.Questions[i].Id, preFilledValue, 5, 30, new { @class = "form-control", title = "Skriv ditt svar här", placeholder = "Skriv ditt svar här" })
                                 </div>
                             }
                             else
                             {
-                                <div class="options d-flex flex-row gap-3 bg-gradient rounded py-5 px-3 w-100">
+                                <div class="options d-flex flex-row flex-wrap justify-content-center align-items-center gap-3 bg-gradient rounded py-5 px-3 w-100">
                                     @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
                                     {
                                         var optionId = $"Question-{Model.Questions[i].Id}-Option-{j}";
                                         var optionValue = Model.Questions[i].Options[j].Name;
                                         var optionName = $"Question-{Model.Questions[i].Id}";
 
+                                        var preFilledValue = "";
+
+                                        if (ViewBag.QuestionAnswers.ContainsKey(optionName))
+                                        {
+                                            preFilledValue = ViewBag.QuestionAnswers[optionName];
+                                        }
+
                                         <div class="d-flex gap-3 itemContainer">
                                             @Html.Label(optionId, Model.Questions[i].Options[j].Name)
-                                            @Html.RadioButton(optionName, optionValue, new { id = optionId, @class = "form-check-input" })
+                                            <input type="radio" name="@optionName" value="@optionValue" id = optionId, class = "form-check-input" checked="@(optionValue == preFilledValue)">
                                         </div>
                                     }
                                 </div>                
@@ -65,7 +83,7 @@
                     }
             </div>
 
-            @if (Model.EndDate > DateTime.Now)
+            @if (Model.EndDate > DateTime.Now && Model.IsDone == false)
             {
                 <button type="submit" class="btn btn-primary">Skicka</button>
             }
