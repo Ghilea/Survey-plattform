@@ -61,8 +61,6 @@
 @section Scripts {
     <script>
         const surveyQuestions = @Html.Raw(Json.Serialize(Model.Questions));
-
-        console.log(surveyQuestions)
     </script>
     <script defer src="~/js/CreateSurvey.js"></script>
 }

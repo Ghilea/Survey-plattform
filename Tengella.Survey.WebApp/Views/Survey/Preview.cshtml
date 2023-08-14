@@ -45,7 +45,7 @@
                     }
                     else
                     {
-                        <div class="options d-flex flex-row gap-3 bg-gradient rounded py-5 px-3 w-100">
+                            <div class="options d-flex flex-row flex-wrap justify-content-center align-items-center gap-3 bg-gradient rounded py-5 px-3 w-100">
                             @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
                             {
                                 var optionId = $"Question-{Model.Questions[i].Id}-Option-{j}";

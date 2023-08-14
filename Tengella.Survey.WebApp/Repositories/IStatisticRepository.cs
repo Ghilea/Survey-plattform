@@ -11,6 +11,7 @@ namespace Tengella.Survey.WebApp.Repositories
         List<StatisticQuestionViewModel> GetAnswersById(int id);
         bool DoesQuestionAnswerNameExist(int id, string name);
         Statistic GetStatisticById(int id);
+        Statistic GetStatisticByEmailAddressAndSurveyId(int surveyId, string email);
         void AddStatistic(Statistic template);
         void UpdateStatistic(Statistic template);
         void DeleteStatistic(int id);

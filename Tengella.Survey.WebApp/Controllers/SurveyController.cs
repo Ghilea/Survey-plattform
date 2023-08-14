@@ -100,7 +100,7 @@ namespace Tengella.Survey.WebApp.Controllers
                 return NotFound();
             }
 
-            var statistic = _StatisticRepository.GetStatisticById(id);
+            var statistic = _StatisticRepository.GetStatisticByEmailAddressAndSurveyId(id, emailAddress);
             var statisticQuestion = _StatisticRepository.GetStatisticQuestionByEmailAddressAndSurveyId(id, emailAddress);
 
             int index = 1;
@@ -151,14 +151,32 @@ namespace Tengella.Survey.WebApp.Controllers
                 string nameKey = $"Name-{questionIndex}";
                 string questionName = form[nameKey];
 
-                var statisticQuestion = new StatisticQuestion
+                if (!_StatisticRepository.DoesQuestionAnswerNameExist(statisticId, questionName))
                 {
-                    Name = questionName,
-                    Answer = form[key],
-                    StatisticId = statisticId
-                };
+                    //add
+                    var statisticQuestion = new StatisticQuestion
+                    {
+                        Name = questionName,
+                        Answer = form[key],
+                        StatisticId = statisticId
+                    };
 
-                _surveyDbcontext.StatisticsQuestions.Add(statisticQuestion);
+                    _surveyDbcontext.StatisticsQuestions.Add(statisticQuestion);
+
+                }
+                else
+                {
+                    // Update the existing StatisticQuestion
+                    var existingQuestion = _surveyDbcontext.StatisticsQuestions
+                        .FirstOrDefault(question => question.StatisticId == statisticId && question.Name == questionName);
+
+                    if (existingQuestion != null)
+                    {
+                        existingQuestion.Answer = form[key];
+
+                    }
+                }
+
             }
 
             var updateStatistic = _surveyDbcontext.Statistics.FirstOrDefault(x => x.Id == statisticId);
